@@ -1,0 +1,9 @@
+{
+	"replace-keys": true,
+	"grunt": false,
+	"output": "/tmp",
+	"ignore": [
+		"TEST",
+		"asdf"
+	]
+}

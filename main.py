@@ -20,7 +20,8 @@ def main():
 
     if test_opt('replace-keys'):
         print('\nReplacing Keys...')
-        rk.replace(wk_path, '/home/pi/data.json')
+        rk.replace(wk_path,
+            '/home/git/post-receive/data.json')
 
     if test_opt('grunt'):
         print('\nGrunting Stuff...')

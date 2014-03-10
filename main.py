@@ -24,6 +24,7 @@ def main():
 
     if test_opt('grunt'):
         print('\nGrunting Stuff...')
+        grunt()
 
     output_dir = test_opt('output')
     ignore_list = test_opt('ignore')
@@ -75,6 +76,9 @@ def move_files(input_dir, output_dir, patterns):
     )
     print('    Moving files from {} to {}'.format(input_dir, output_dir))
 
+def grunt():
+    os.system('npm install > /dev/null')
+    os.system('grunt')
 
 if __name__ == '__main__':
     main()

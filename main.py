@@ -18,16 +18,19 @@ def main():
             return False
         return opt
 
-    if test_opt('replace-keys'):
-        print('\nReplacing Keys...')
-        rk.replace(wk_path, '/home/pi/data.json')
-
-    if test_opt('grunt'):
-        print('\nGrunting Stuff...')
-        grunt()
-
     output_dir = test_opt('output')
     ignore_list = test_opt('ignore')
+
+    if test_opt('replace-keys'):
+        print('\nReplacing Keys...')
+        rk.replace(wk_path,
+            '/home/git/post-receive/data.json')
+
+    if test_opt('grunt'):
+        ignore_list.append('package.json')
+        ignore_list.append('Gruntfile.js')
+        print('\nGrunting Stuff...')
+        grunt()
 
     if output_dir:
         print('\nOutputting to ', output_dir)

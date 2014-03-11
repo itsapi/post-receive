@@ -11,6 +11,11 @@ def main():
 
     options = load_options('options.json')
 
+    output_dir = test_opt('output')
+    ignore_list = test_opt('ignore')
+    grunt_enabled = test_opt('grunt')
+    replace_keys = test_opt('replace-keys')
+
     def test_opt(option_name):
         try:
             opt = options[option_name]
@@ -18,17 +23,19 @@ def main():
             return False
         return opt
 
-    output_dir = test_opt('output')
-    ignore_list = test_opt('ignore')
+    if grunt_enabled: wk_path += '/src'
 
-    if test_opt('replace-keys'):
+    if replace_keys:
         print('\nReplacing Keys...')
         rk.replace(wk_path,
             '/home/git/post-receive/data.json')
 
-    if test_opt('grunt'):
-        print('\nGrunting Stuff...')
-        grunt()
+    if grunt_enabled:
+        if os.path.isdir('src'):
+            print('\nGrunting Stuff...')
+            run_grunt()
+        else:
+            print('\nNo src directory found - disabling grunt')
 
     if output_dir:
         print('\nOutputting to ', output_dir)
@@ -87,7 +94,7 @@ def move_files(input_dir, output_dir, patterns):
     )
     print('    Moving files from {} to {}'.format(input_dir, output_dir))
 
-def grunt():
+def run_grunt():
     os.system('npm install > /dev/null')
     os.system('grunt')
 

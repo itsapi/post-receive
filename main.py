@@ -29,6 +29,7 @@ def main():
     if test_opt('grunt'):
         ignore_list.append('package.json')
         ignore_list.append('Gruntfile.js')
+        ignore_list.append('node_modules')
         print('\nGrunting Stuff...')
         grunt()
 

@@ -54,7 +54,9 @@ def load_options(filename):
 
 
 def clear_dir(directory, patterns):
-    files = os.listdir(directory)
+    wk_path = os.getcwd()
+    os.chdir(directory)
+    files = os.listdir()
 
     ignore = []
     for pattern in patterns:
@@ -63,9 +65,11 @@ def clear_dir(directory, patterns):
     remove = [file for file in files if file not in ignore]
     if remove:
         print('    Removing from {}: {}'.format(directory, ', '.join(remove)))
-        os.system('rm -r ' + ' '.join(os.path.join(directory, file) for file in remove))
+        os.system('rm -r ' + ' '.join(file for file in remove))
     else:
         print('    No files to remove from output')
+
+    os.chdir(wk_path)
 
 
 def move_files(input_dir, output_dir, patterns):

@@ -23,7 +23,10 @@ def main():
             return False
         return opt
 
-    if grunt_enabled: wk_path += '/src'
+    if not os.path.isdir('src'): grunt_enabled = False
+
+    if grunt_enabled: 
+        wk_path += '/src'
 
     if replace_keys:
         print('\nReplacing Keys...')
@@ -31,11 +34,9 @@ def main():
             '/home/git/post-receive/data.json')
 
     if grunt_enabled:
-        if os.path.isdir('src'):
-            print('\nGrunting Stuff...')
-            run_grunt()
-        else:
-            print('\nNo src directory found - disabling grunt')
+        print('\nGrunting Stuff...')
+        run_grunt()
+        wk_path = os.getcwd() + '/build'
 
     if output_dir:
         print('\nOutputting to ', output_dir)

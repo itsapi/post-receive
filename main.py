@@ -27,9 +27,6 @@ def main():
             '/home/git/post-receive/data.json')
 
     if test_opt('grunt'):
-        ignore_list.append('package.json')
-        ignore_list.append('Gruntfile.js')
-        ignore_list.append('node_modules')
         print('\nGrunting Stuff...')
         grunt()
 
@@ -39,7 +36,13 @@ def main():
         if not ignore_list:
             print('    No files to ignore')
             ignore_list = []
-        ignore_list.append('options.json')
+
+        ignore_list += [
+            'options.json',
+            'package.json',
+            'Gruntfile.js',
+            'node_modules'
+        ]
 
         clear_dir(output_dir, ignore_list)
         move_files(wk_path, output_dir, ignore_list)

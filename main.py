@@ -11,17 +11,17 @@ def main():
 
     options = load_options('options.json')
 
-    output_dir = test_opt('output')
-    ignore_list = test_opt('ignore')
-    grunt_enabled = test_opt('grunt')
-    replace_keys = test_opt('replace-keys')
-
     def test_opt(option_name):
         try:
             opt = options[option_name]
         except KeyError:
             return False
         return opt
+
+    output_dir = test_opt('output')
+    ignore_list = test_opt('ignore')
+    grunt_enabled = test_opt('grunt')
+    replace_keys = test_opt('replace-keys')
 
     if not os.path.isdir('src'): grunt_enabled = False
 

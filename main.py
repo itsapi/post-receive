@@ -31,7 +31,7 @@ def main():
     if replace_keys:
         print('\nReplacing Keys...')
         rk.replace(wk_path,
-            '/home/git/post-receive/data.json')
+            '/home/git/post-receive/data.json', ['node_modules'])
 
     if grunt_enabled:
         print('\nGrunting Stuff...')

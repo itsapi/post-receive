@@ -5,13 +5,14 @@ import string
 import sys
 
 
-def find(path, file_op, arg):
+def find(path, file_op, arg, ignore=[]):
     for item in listdir(path):
         f = join(path, item)
-        if isfile(f):
-            file_op(f, arg)
-        elif isdir(f):
-            find(f, file_op, arg)
+        if not item in ignore:
+            if isfile(f):
+                file_op(f, arg)
+            elif isdir(f):
+                find(f, file_op, arg)
 
 def insert_data(filename, data):
     try:
@@ -37,9 +38,9 @@ def extract_data(data_filename):
        print('    Error in processing JSON file: ', sys.exc_info()[0])
        raise
 
-def replace(directory, data_filename):
+def replace(directory, data_filename, ignore=[]):
     data = extract_data(data_filename)
-    find(directory, insert_data, data)
+    find(directory, insert_data, data, ignore)
     print('    All keys in {} replaced'.format(directory))
 
 

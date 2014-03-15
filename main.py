@@ -21,7 +21,12 @@ def main():
     output_dir = test_opt('output')
     ignore_list = test_opt('ignore')
     grunt_enabled = test_opt('grunt')
+    node_enabled = test_opt('node')
     replace_keys = test_opt('replace-keys')
+    command = test_opt('command')
+
+    if grunt_enabled and node_enabled:
+        raise error('    Grunt and Node cannot be enabled together')
 
     if not os.path.isdir('src'): grunt_enabled = False
 
@@ -45,16 +50,29 @@ def main():
             print('    No files to ignore')
             ignore_list = []
 
+        if grunt_enabled:
+            ignore_list += [
+                'package.json',
+                'Gruntfile.js'
+            ]
+
         ignore_list += [
             'options.json',
-            'package.json',
-            'Gruntfile.js',
             'node_modules'
         ]
 
         clear_dir(output_dir, ignore_list)
         move_files(wk_path, output_dir, ignore_list)
 
+        os.chdir(output_dir)
+
+        if node_enabled:
+            print('\nInstalling node_modules')
+            os.system('npm install > /dev/null')
+
+        if command:
+            print('\nRunning custom command')
+            os.system(command)
     else:
         print('\nNo output directory specified in options.json')
 
@@ -95,9 +113,11 @@ def move_files(input_dir, output_dir, patterns):
     )
     print('    Moving files from {} to {}'.format(input_dir, output_dir))
 
+
 def run_grunt():
     os.system('npm install > /dev/null')
     os.system('grunt')
+
 
 if __name__ == '__main__':
     main()

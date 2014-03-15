@@ -13,6 +13,8 @@ def find(path, file_op, arg, ignore=[]):
                 file_op(f, arg)
             elif isdir(f):
                 find(f, file_op, arg)
+        else:
+            print('    Ignoring {}'.format(f))
 
 def insert_data(filename, data):
     try:

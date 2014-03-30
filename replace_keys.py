@@ -14,14 +14,14 @@ def find(path, file_op, arg, ignore=[]):
             elif isdir(f):
                 find(f, file_op, arg)
         else:
-            print('    Ignoring {}'.format(f))
+            print('Ignoring {}'.format(f))
 
 def insert_data(filename, data):
     try:
         with open(filename, 'r') as f:
             file_str = f.read()
     except UnicodeDecodeError:
-        print('    Ignoring {}. (UnicodeDecodeError)'.format(filename))
+        print('Ignoring {}. (UnicodeDecodeError)'.format(filename))
         return
 
     for key, value in data.items():
@@ -37,15 +37,13 @@ def extract_data(data_filename):
         return loads(data_str)
 
     except:
-       print('    Error in processing JSON file: ', sys.exc_info()[0])
+       print('Error in processing JSON file: ', sys.exc_info()[0])
        raise
 
 def replace(directory, filename, ignore=[]):
-    filename = expanduser(filename)
-    directory = expanduser(directory)
     data = extract_data(filename)
     find(directory, insert_data, data, ignore)
-    print('    All keys in {} replaced'.format(directory))
+    print('All keys in {} replaced'.format(directory))
 
 
 def main():

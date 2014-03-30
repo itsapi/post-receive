@@ -25,13 +25,19 @@ def main():
     replace_keys = test_opt('replace-keys')
     command = test_opt('command')
 
+    try:
+        dev = (sys.argv[1] == 'dev')
+    except KeyError:
+        dev = False
+
+    if dev: output_dir = False
+
     if grunt_enabled and node_enabled:
         raise error('    Grunt and Node cannot be enabled together')
 
     if not os.path.isdir('src'): grunt_enabled = False
 
-    if grunt_enabled: 
-        wk_path += '/src'
+    if grunt_enabled: wk_path += '/src'
 
     if replace_keys:
         print('\nReplacing Keys...')

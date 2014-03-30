@@ -1,5 +1,5 @@
 from os import listdir
-from os.path import join, isfile, isdir
+from os.path import join, isfile, isdir, expanduser
 from json import loads
 import string
 import sys
@@ -40,8 +40,10 @@ def extract_data(data_filename):
        print('    Error in processing JSON file: ', sys.exc_info()[0])
        raise
 
-def replace(directory, data_filename, ignore=[]):
-    data = extract_data(data_filename)
+def replace(directory, filename, ignore=[]):
+    filename = expanduser(filename)
+    directory = expanduser(directory)
+    data = extract_data(filename)
     find(directory, insert_data, data, ignore)
     print('    All keys in {} replaced'.format(directory))
 

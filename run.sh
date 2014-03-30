@@ -10,4 +10,4 @@ git checkout -f
 
 cd $path
 
-python3 ../main.py
+python3 ../main.py /home/git/post-receive/data.json

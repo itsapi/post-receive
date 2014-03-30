@@ -1,6 +1,8 @@
-import json
-import sys
 import os
+import sys
+import json
+import argparse
+
 from glob import glob
 
 import replace_keys as rk
@@ -9,6 +11,7 @@ import replace_keys as rk
 def main():
     wk_path = os.getcwd()
 
+    args = load_args()
     options = load_options('options.json')
 
     def test_opt(option_name):
@@ -25,12 +28,7 @@ def main():
     replace_keys = test_opt('replace-keys')
     command = test_opt('command')
 
-    try:
-        dev = (sys.argv[1] == 'dev')
-    except KeyError:
-        dev = False
-
-    if dev: output_dir = False
+    if args.dev: output_dir = False
 
     if grunt_enabled and node_enabled:
         raise error('    Grunt and Node cannot be enabled together')
@@ -42,7 +40,7 @@ def main():
     if replace_keys:
         print('\nReplacing Keys...')
         rk.replace(wk_path,
-            '/home/git/post-receive/data.json', ['node_modules'])
+            args.file, ['node_modules'])
 
     if grunt_enabled:
         print('\nGrunting Stuff...')
@@ -81,6 +79,17 @@ def main():
             os.system(command)
     else:
         print('\nNo output directory specified in options.json')
+
+
+def load_args():
+    parser = argparse.ArgumentParser(
+        description='A git build script (https://github.com/itsapi/post-receive)')
+    parser.add_argument('file', nargs='?', default='~/data.json',
+        help='the path of data.json for replace_keys (defaults to ~/data.json)')
+    parser.add_argument('-d', '--dev', action='store_true',
+        help='ignore the output directory for development environments')
+
+    return parser.parse_args()
 
 
 def load_options(filename):

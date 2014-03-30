@@ -1,5 +1,5 @@
-post-receive
-================
+Post Receive
+============
 
 These scripts are run after code is pushed to the server. They compile everything and deploy to the correct location.
 

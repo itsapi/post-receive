@@ -9,7 +9,7 @@ rm -rf $path/!(node_modules)
 
 cd /home/git/$name.git
 
-git fetch $url master:master
+git fetch $url master:master -f
 export GIT_WORK_TREE=$path
 git checkout -f
 

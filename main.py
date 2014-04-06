@@ -63,6 +63,7 @@ def main():
         if node_enabled:
             print('\nInstalling node_modules')
             os.system('npm install > /dev/null')
+            os.system('forever restartall')
 
         if command:
             print('\nRunning custom command')

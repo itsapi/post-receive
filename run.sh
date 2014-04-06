@@ -1,7 +1,7 @@
 #!/bin/bash
 
 url="$1"
-name="$2"
+name=${url##*/}
 path="/home/git/post-receive/processing"
 
 shopt -s extglob

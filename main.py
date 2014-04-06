@@ -111,7 +111,7 @@ def move_files(input_dir, output_dir, patterns):
 
 def run_grunt():
     os.system('npm install > /dev/null')
-    os.system('grunt')
+    os.system('grunt --no-color')
 
 
 if __name__ == '__main__':

@@ -16,4 +16,4 @@ git checkout -f
 
 cd $path
 
-python3 ../main.py
+python3 ../main.py >> ~/log

@@ -62,7 +62,7 @@ def main():
 
         if node_enabled:
             print('\nInstalling node_modules')
-            os.system('npm install > /dev/null')
+            os.system('npm install')
             os.system('forever restartall')
 
         if command:
@@ -110,8 +110,8 @@ def move_files(input_dir, output_dir, patterns):
 
 
 def run_grunt():
-    os.system('npm install > /dev/null')
-    os.system('grunt')
+    os.system('npm install')
+    os.system('grunt --no-color')
 
 
 if __name__ == '__main__':

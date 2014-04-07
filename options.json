@@ -1,9 +1,6 @@
 {
-	"replace-keys": true,
-	"grunt": false,
-	"output": "/tmp",
+	"output": "/home/git/post-receive",
 	"ignore": [
-		"TEST",
-		"asdf"
+		"processing"
 	]
 }

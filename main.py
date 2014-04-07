@@ -63,7 +63,7 @@ def main():
         if node_enabled:
             print('\nInstalling node_modules')
             os.system('npm install')
-            os.system('forever restart {path}/index.js'.format(output_dir))
+            os.system('forever restart {}/index.js'.format(output_dir))
 
         if command:
             print('\nRunning custom command')

@@ -4,6 +4,7 @@ url="$1"
 name=${url##*/}
 path="/home/git/post-receive/processing"
 
+mkdir $path
 shopt -s extglob
 rm -rf $path/!(node_modules)
 

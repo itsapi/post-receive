@@ -55,15 +55,25 @@ def main():
             'node_modules'
         ]
 
+        if node_enabled:
+            os.system('forever stop {}/index.js'.format(output_dir))
+
         clear_dir(output_dir, ignore_list)
         move_files(wk_path, output_dir, ignore_list)
 
         os.chdir(output_dir)
 
         if node_enabled:
-            print('\nInstalling node_modules')
+            print('\nRestarting node script')
             os.system('npm install')
-            os.system('forever restart {}/index.js'.format(output_dir))
+            os.system(
+                'forever start -a\
+                -l forever.log\
+                -o {path}/out.log\
+                -e {path}/err.log\
+                {path}/index.js'
+                .format(path=output_dir)
+            )
 
         if command:
             print('\nRunning custom command')

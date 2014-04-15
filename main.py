@@ -73,7 +73,7 @@ def main():
         print('\nNo output directory specified in options.json')
 
     print('\nFinished. Site should now be live' +
-        (' at ' + url) if url else '.')
+        (' at ' + url if url else '.'))
 
 
 def load_options(filename):

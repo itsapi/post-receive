@@ -24,6 +24,7 @@ def main():
     grunt_enabled = test_opt('grunt')
     node_enabled = test_opt('node')
     command = test_opt('command')
+    url = test_opt('url')
 
     if grunt_enabled and node_enabled:
         raise error('    Grunt and Node cannot be enabled together')
@@ -70,6 +71,9 @@ def main():
             os.system(command)
     else:
         print('\nNo output directory specified in options.json')
+
+    print('\nFinished. Site should now be live' +
+        (' at ' + url) if url else '.')
 
 
 def load_options(filename):

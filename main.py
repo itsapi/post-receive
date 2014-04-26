@@ -61,9 +61,8 @@ def main():
         os.chdir(output_dir)
 
         if node_enabled:
-            print('\nRestarting node script')
+            print('\nUpdating node dependencies')
             os.system('npm install')
-            os.system('forever restart {}/index.js'.format(output_dir))
 
         if command:
             print('\nRunning custom command')

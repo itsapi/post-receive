@@ -35,7 +35,7 @@ def main():
         print('\nGrunting Stuff...')
 
         wk_path += '/src'
-        run_grunt()
+        if run_grunt(): sys.exit('Exiting because Grunt failed')
         wk_path = os.getcwd() + '/build'
 
     if output_dir:
@@ -114,7 +114,7 @@ def move_files(input_dir, output_dir, patterns):
 
 def run_grunt():
     os.system('npm install')
-    os.system('grunt --no-color')
+    return os.system('grunt --no-color')
 
 
 if __name__ == '__main__':

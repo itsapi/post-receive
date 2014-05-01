@@ -41,6 +41,8 @@ def main():
     if output_dir:
         print('\nOutputting to ', output_dir)
 
+        os.system('mkdir ' + output_dir)
+
         if not ignore_list:
             print('    No files to ignore')
             ignore_list = []

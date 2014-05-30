@@ -4,8 +4,6 @@ import json
 
 from glob import glob
 
-import replace_keys as rk
-
 
 def main():
     wk_path = os.getcwd()

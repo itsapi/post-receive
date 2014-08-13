@@ -8,21 +8,15 @@ from glob import glob
 def main():
     wk_path = os.getcwd()
 
-    options = load_options('options.json')
+    with open('options.json') as f:
+        options = json.loads(f.read())
 
-    def test_opt(option_name):
-        try:
-            opt = options[option_name]
-        except KeyError:
-            return False
-        return opt
-
-    output_dir = test_opt('output')
-    ignore_list = test_opt('ignore')
-    grunt_enabled = test_opt('grunt')
-    node_enabled = test_opt('node')
-    command = test_opt('command')
-    url = test_opt('url')
+    output_dir = load_option(options, 'output')
+    ignore_list = load_option(options, 'ignore')
+    grunt_enabled = load_option(options, 'grunt')
+    node_enabled = load_option(options, 'node')
+    command = load_option(options, 'command')
+    url = load_option(options, 'url')
 
     if grunt_enabled and node_enabled:
         raise error('    Grunt and Node cannot be enabled together')
@@ -75,11 +69,16 @@ def main():
         (' at ' + url if url else '.'))
 
 
-def load_options(filename):
-    with open(filename) as f:
-        options = json.loads(f.read())
-    return options
+def load_option(options, option_name):
+    try:
+        return options['hosts'][os.uname()[1]][option_name]
+    except KeyError:
+        pass
 
+    try:
+        return options[option_name]
+    except KeyError:
+        return False
 
 def clear_dir(directory, patterns):
     wk_path = os.getcwd()

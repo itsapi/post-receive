@@ -24,8 +24,8 @@ def main():
     if grunt_enabled and node_enabled:
         error(repo, addr, 'Grunt and Node cannot be enabled together')
 
-    if not os.path.isdir('src'):
-        print('    /src directory does not exist - disabling Grunt')
+    if grunt_enabled and not os.path.isdir('src'):
+        print('src directory does not exist - disabling Grunt')
         grunt_enabled = False
 
     if grunt_enabled:
@@ -116,7 +116,7 @@ def error(repo, addr, error):
         p.write(body)
         p.close()
 
-    sys.exit(error)
+    sys.exit('\nERROR: '+error)
 
 
 if __name__ == '__main__':

@@ -39,15 +39,10 @@ def main():
             print('    No files to ignore')
             ignore_list = []
 
-        if grunt_enabled:
-            ignore_list += [
-                'package.json',
-                'Gruntfile.js'
-            ]
-
         ignore_list += [
             'options.json',
-            'node_modules'
+            'package.json',
+            'Gruntfile.js'
         ]
 
         clear_dir(output_dir, ignore_list)
@@ -85,6 +80,7 @@ def clear_dir(directory, patterns):
     os.chdir(directory)
     files = os.listdir()
 
+    patterns += ['node_modules']
     ignore = []
     for pattern in patterns:
         ignore += glob(pattern)

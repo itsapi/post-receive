@@ -39,11 +39,8 @@ def main():
             print('    No files to ignore')
             ignore_list = []
 
-        ignore_list += [
-            'options.json',
-            'package.json',
-            'Gruntfile.js'
-        ]
+        if grunt_enabled: ignore_list += ['package.json', 'Gruntfile.js']
+        ignore_list += ['options.json']
 
         clear_dir(output_dir, ignore_list)
         move_files(wk_path, output_dir, ignore_list)

@@ -40,7 +40,7 @@ def main():
             ignore_list = []
 
         if grunt_enabled: ignore_list += ['package.json', 'Gruntfile.js']
-        ignore_list += ['options.json']
+        ignore_list += ['options.json', 'node_modules']
 
         clear_dir(output_dir, ignore_list)
         move_files(wk_path, output_dir, ignore_list)
@@ -77,7 +77,6 @@ def clear_dir(directory, patterns):
     os.chdir(directory)
     files = os.listdir()
 
-    patterns += ['node_modules']
     ignore = []
     for pattern in patterns:
         ignore += glob(pattern)

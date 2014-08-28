@@ -1,12 +1,14 @@
 import os
 import sys
 import json
+import time
 
 from glob import glob
 
 
 def main():
     wk_path = os.getcwd()
+    repo = os.getcwd()
 
     with open('options.json') as f:
         options = json.loads(f.read())
@@ -17,18 +19,19 @@ def main():
     node_enabled = load_option(options, 'node')
     command = load_option(options, 'command')
     url = load_option(options, 'url')
+    addr = load_option(options, 'email')
 
     if grunt_enabled and node_enabled:
-        raise error('    Grunt and Node cannot be enabled together')
+        error(repo, addr, 'Grunt and Node cannot be enabled together')
 
     if not os.path.isdir('src'): grunt_enabled = False
 
     if grunt_enabled:
         print('\nGrunting Stuff...')
 
-        wk_path += '/src'
-        if run_grunt(): sys.exit('Exiting because Grunt failed')
-        wk_path = os.getcwd() + '/build'
+        if os.system('npm install'): error(repo, addr, 'Npm install failed')
+        if os.system('grunt --no-color'): error(repo, addr, 'Grunt failed')
+        wk_path += '/build'
 
     if output_dir:
         print('\nOutputting to ', output_dir)
@@ -49,11 +52,11 @@ def main():
 
         if node_enabled:
             print('\nUpdating node dependencies')
-            os.system('npm install')
+            if os.system('npm install'): error(repo, addr, 'Npm install failed')
 
         if command:
             print('\nRunning custom command')
-            os.system(command)
+            if os.system(command): error(repo, addr, 'Custom command failed')
     else:
         print('\nNo output directory specified in options.json')
 
@@ -71,6 +74,7 @@ def load_option(options, option_name):
         return options[option_name]
     except KeyError:
         return False
+
 
 def clear_dir(directory, patterns):
     wk_path = os.getcwd()
@@ -103,9 +107,17 @@ def move_files(input_dir, output_dir, patterns):
     print('    Moving files from {} to {}'.format(input_dir, output_dir))
 
 
-def run_grunt():
-    os.system('npm install')
-    return os.system('grunt --no-color')
+def error(repo, addr, error):
+    if addr:
+        subject = '{} build failed'.format(repo)
+        body = ('{} failed to build correctly at {}\nError message: {}'
+               .format(repo, time.strftime('%c'), error))
+
+        p = os.popen('mail -s "{}" {}'.format(subject, ' '.join(addr)), 'w')
+        p.write(body)
+        p.close()
+
+    sys.exit(error)
 
 
 if __name__ == '__main__':

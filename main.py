@@ -24,7 +24,9 @@ def main():
     if grunt_enabled and node_enabled:
         error(repo, addr, 'Grunt and Node cannot be enabled together')
 
-    if not os.path.isdir('src'): grunt_enabled = False
+    if not os.path.isdir('src'):
+        print('    /src directory does not exist - disabling Grunt')
+        grunt_enabled = False
 
     if grunt_enabled:
         print('\nGrunting Stuff...')
@@ -38,10 +40,7 @@ def main():
 
         os.system('mkdir ' + output_dir)
 
-        if not ignore_list:
-            print('    No files to ignore')
-            ignore_list = []
-
+        if not ignore_list: ignore_list = []
         if grunt_enabled: ignore_list += ['package.json', 'Gruntfile.js']
         ignore_list += ['options.json', 'node_modules']
 

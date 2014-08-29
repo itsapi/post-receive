@@ -3,8 +3,6 @@ import sys
 import json
 import time
 
-from glob import glob
-
 
 def main():
     wk_path = os.getcwd()
@@ -78,22 +76,17 @@ def clear_dir(directory, patterns):
     wk_path = os.getcwd()
     os.chdir(directory)
 
-    ignore = []
-    for pattern in patterns:
-        ignore += glob(pattern)
+    print('post-receive: removing files from ' + directory)
 
-    print('\npost-receive: removing files from {}\n'.format(directory))
-
-    d = ' ! -path ./'
-    cmd = 'find . {} -delete'.format(d + d.join(ignore))
+    d = "' ! -path './"
+    cmd = "find . ! -path './{}' -delete".format(d.join(patterns))
     os.system(cmd)
     os.chdir(wk_path)
 
 
 def move_files(input_dir, output_dir, patterns):
-    print('\npost-receive: copying files from {} to {}\n'.format(input_dir, output_dir))
+    print('post-receive: copying files to ' + output_dir)
 
-    files = os.listdir(input_dir)
     os.system('rsync -r --exclude="{pattern}" {input}/* {out}'
         .format(
             pattern = '" --exclude="'.join(patterns),

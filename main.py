@@ -78,6 +78,8 @@ def clear_dir(directory, patterns):
 
     print('post-receive: removing files from ' + directory)
 
+    patterns = [(p + '/*' if os.path.isdir(p) else p) for p in patterns]
+
     d = "' ! -path './"
     cmd = "find . ! -path './{}' -delete".format(d.join(patterns))
     os.system(cmd)

@@ -29,14 +29,14 @@ def main():
         grunt_enabled = False
 
     if grunt_enabled:
-        print('\npost-receive: running grunt\n')
+        print('post-receive: running grunt')
 
         if os.system('npm install'): error(repo, addr, 'npm install failed')
         if os.system('grunt --no-color'): error(repo, addr, 'grunt failed')
         wk_path += '/build'
 
     if output_dir:
-        print('\npost-receive: outputting to {}\n'.format(output_dir))
+        print('post-receive: outputting to {}'.format(output_dir))
 
         os.system('mkdir ' + output_dir)
 
@@ -50,16 +50,16 @@ def main():
         os.chdir(output_dir)
 
         if node_enabled:
-            print('\npost-receive: updating node dependencies\n')
+            print('post-receive: updating node dependencies')
             if os.system('npm install'): error(repo, addr, 'npm install failed')
 
         if command:
-            print('\npost-receive: running custom command\n')
+            print('post-receive: running custom command')
             if os.system(command): error(repo, addr, 'custom command failed')
     else:
-        print('post-receive [warning]: no output directory specified in options.json')
+        error(repo, addr, 'no output directory specified in options.json')
 
-    print('\npost-receive: finished, site should now be live' +
+    print('post-receive: finished, site should now be live' +
         (' at ' + url if url else '.'))
 
 
@@ -113,7 +113,7 @@ def error(repo, addr, error):
         p.write(body)
         p.close()
 
-    sys.exit('\npost-receive [error]: '+error)
+    sys.exit('post-receive [error]: '+error)
 
 
 if __name__ == '__main__':

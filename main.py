@@ -22,21 +22,21 @@ def main():
     addr = load_option(options, 'email')
 
     if grunt_enabled and node_enabled:
-        error(repo, addr, 'Grunt and Node cannot be enabled together')
+        error(repo, addr, 'grunt and node cannot be enabled together')
 
     if grunt_enabled and not os.path.isdir('src'):
-        print('src directory does not exist - disabling Grunt')
+        print('post-receive [warning]: src directory does not exist - disabling grunt')
         grunt_enabled = False
 
     if grunt_enabled:
-        print('\nGrunting Stuff...')
+        print('\npost-receive: running grunt\n')
 
-        if os.system('npm install'): error(repo, addr, 'Npm install failed')
-        if os.system('grunt --no-color'): error(repo, addr, 'Grunt failed')
+        if os.system('npm install'): error(repo, addr, 'npm install failed')
+        if os.system('grunt --no-color'): error(repo, addr, 'grunt failed')
         wk_path += '/build'
 
     if output_dir:
-        print('\nOutputting to ', output_dir)
+        print('\npost-receive: outputting to {}\n'.format(output_dir))
 
         os.system('mkdir ' + output_dir)
 
@@ -50,16 +50,16 @@ def main():
         os.chdir(output_dir)
 
         if node_enabled:
-            print('\nUpdating node dependencies')
-            if os.system('npm install'): error(repo, addr, 'Npm install failed')
+            print('\npost-receive: updating node dependencies\n')
+            if os.system('npm install'): error(repo, addr, 'npm install failed')
 
         if command:
-            print('\nRunning custom command')
-            if os.system(command): error(repo, addr, 'Custom command failed')
+            print('\npost-receive: running custom command\n')
+            if os.system(command): error(repo, addr, 'custom command failed')
     else:
-        print('\nNo output directory specified in options.json')
+        print('post-receive [warning]: no output directory specified in options.json')
 
-    print('\nFinished. Site should now be live' +
+    print('\npost-receive: finished, site should now be live' +
         (' at ' + url if url else '.'))
 
 
@@ -103,7 +103,6 @@ def move_files(input_dir, output_dir, patterns):
             out = output_dir
         )
     )
-    print('    Moving files from {} to {}'.format(input_dir, output_dir))
 
 
 def error(repo, addr, error):
@@ -116,7 +115,7 @@ def error(repo, addr, error):
         p.write(body)
         p.close()
 
-    sys.exit('\nERROR: '+error)
+    sys.exit('\npost-receive [error]: '+error)
 
 
 if __name__ == '__main__':

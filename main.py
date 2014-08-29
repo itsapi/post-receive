@@ -74,27 +74,25 @@ def load_option(options, option_name):
     except KeyError:
         return False
 
-
 def clear_dir(directory, patterns):
     wk_path = os.getcwd()
     os.chdir(directory)
-    files = os.listdir()
 
     ignore = []
     for pattern in patterns:
         ignore += glob(pattern)
 
-    remove = [file for file in files if file not in ignore]
-    if remove:
-        print('    Removing from {}: {}'.format(directory, ', '.join(remove)))
-        os.system('rm -r ' + ' '.join(file for file in remove))
-    else:
-        print('    No files to remove from output')
+    print('\npost-receive: removing files from {}\n'.format(directory))
 
+    d = ' ! -path ./'
+    cmd = 'find . {} -delete'.format(d + d.join(ignore))
+    os.system(cmd)
     os.chdir(wk_path)
 
 
 def move_files(input_dir, output_dir, patterns):
+    print('\npost-receive: copying files from {} to {}\n'.format(input_dir, output_dir))
+
     files = os.listdir(input_dir)
     os.system('rsync -r --exclude="{pattern}" {input}/* {out}'
         .format(

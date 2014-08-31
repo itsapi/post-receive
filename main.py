@@ -6,7 +6,11 @@ import time
 
 def main():
     wk_path = os.getcwd()
-    repo = os.getcwd()
+
+    try:
+        repo = sys.argv[1]
+    except IndexError:
+        repo = 'unknown repo'
 
     with open('options.json') as f:
         options = json.loads(f.read())

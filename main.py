@@ -23,23 +23,19 @@ def main():
     url = load_option(options, 'url')
     addr = load_option(options, 'email')
 
-    if grunt_enabled and node_enabled:
-        error(repo, addr, 'grunt and node cannot be enabled together')
-
-    if grunt_enabled and not os.path.isdir('src'):
-        print('post-receive [warning]: src directory does not exist - disabling grunt')
-        grunt_enabled = False
-
     if grunt_enabled:
-        print('post-receive: running grunt')
+        if node_enabled:
+            error(repo, addr, 'grunt and node cannot be enabled together')
+        if not os.path.isdir('src'):
+            error(repo, addr, 'running grunt and src directory does not exist')
 
+        print('post-receive: running grunt')
         if os.system('npm install'): error(repo, addr, 'npm install failed')
         if os.system('grunt --no-color'): error(repo, addr, 'grunt failed')
         wk_path += '/build'
 
     if output_dir:
         print('post-receive: outputting to {}'.format(output_dir))
-
         os.system('mkdir ' + output_dir)
 
         if not ignore_list: ignore_list = []
@@ -48,7 +44,6 @@ def main():
 
         clear_dir(output_dir, ignore_list)
         move_files(wk_path, output_dir, ignore_list)
-
         os.chdir(output_dir)
 
         if node_enabled:
@@ -70,7 +65,6 @@ def load_option(options, option_name):
         return options['hosts'][os.uname()[1]][option_name]
     except KeyError:
         pass
-
     try:
         return options[option_name]
     except KeyError:
@@ -81,7 +75,6 @@ def clear_dir(directory, patterns):
     os.chdir(directory)
 
     print('post-receive: removing files from ' + directory)
-
     patterns = [(p + '/*' if os.path.isdir(p) else p) for p in patterns]
 
     d = "' ! -path './"
@@ -92,7 +85,6 @@ def clear_dir(directory, patterns):
 
 def move_files(input_dir, output_dir, patterns):
     print('post-receive: copying files to ' + output_dir)
-
     os.system('rsync -r --exclude="{pattern}" {input}/* {out}'
         .format(
             pattern = '" --exclude="'.join(patterns),

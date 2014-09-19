@@ -26,13 +26,11 @@ def main():
     if grunt_enabled:
         if node_enabled:
             error(repo, addr, 'grunt and node cannot be enabled together')
-        if not os.path.isdir('src'):
-            error(repo, addr, 'running grunt and src directory does not exist')
 
         print('post-receive: running grunt')
         if os.system('npm install'): error(repo, addr, 'npm install failed')
         if os.system('grunt --no-color'): error(repo, addr, 'grunt failed')
-        wk_path += '/build'
+        if os.path.isdir('src'): wk_path += '/build'
 
     if output_dir:
         print('post-receive: outputting to {}'.format(output_dir))

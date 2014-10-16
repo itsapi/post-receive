@@ -68,6 +68,7 @@ def load_option(options, option_name):
     except KeyError:
         return False
 
+
 def clear_dir(directory, patterns):
     wk_path = os.getcwd()
     os.chdir(directory)

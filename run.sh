@@ -8,6 +8,11 @@ mkdir $path
 shopt -s extglob
 rm -rf $path/!(node_modules)
 
+if [ ! -d "/home/git/$name.git" ]; then
+  echo hi
+  cd /home/git
+  git clone --bare $url
+fi
 cd /home/git/$name.git
 
 git fetch $url master:master -f

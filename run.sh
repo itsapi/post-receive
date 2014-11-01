@@ -1,20 +1,22 @@
 #!/bin/bash
 
-url="$1"
-name=${url##*/}
+name="$1"
+ssh_host="git@github.com:$name"
 path="/home/git/post-receive/processing"
+repo="/home/git/$name.git"
 
 mkdir $path
 shopt -s extglob
 rm -rf $path/!(node_modules)
 
-if [ ! -d "/home/git/$name.git" ]; then
-  cd /home/git
-  git clone --bare $url
+if [ ! -d $repo ]; then
+  mkdir -p $repo
+  git init --bare $repo
 fi
-cd /home/git/$name.git
 
-git fetch $url master:master -f
+cd $repo
+
+git fetch $ssh_host master:master -f
 export GIT_WORK_TREE=$path
 git checkout -f
 

@@ -5,12 +5,13 @@ import time
 
 
 def main():
-    wk_path = os.getcwd()
-
     try:
-        repo = sys.argv[1]
+        wk_path = sys.argv[1]
     except IndexError:
-        repo = 'unknown repo'
+        wk_path = os.getcwd()
+
+    os.chdir(wk_path)
+    path = wk_path
 
     with open('options.json') as f:
         options = json.loads(f.read())
@@ -25,11 +26,11 @@ def main():
 
     if grunt_enabled:
         if node_enabled:
-            error(repo, addr, 'grunt and node cannot be enabled together')
+            error(path, addr, 'grunt and node cannot be enabled together')
 
         print('post-receive: running grunt')
-        if os.system('npm install'): error(repo, addr, 'npm install failed')
-        if os.system('grunt --no-color'): error(repo, addr, 'grunt failed')
+        if os.system('npm install'): error(path, addr, 'npm install failed')
+        if os.system('grunt --no-color'): error(path, addr, 'grunt failed')
         if os.path.isdir('src'): wk_path += '/build'
 
     if output_dir:
@@ -46,16 +47,17 @@ def main():
 
         if node_enabled:
             print('post-receive: updating node dependencies')
-            if os.system('npm install'): error(repo, addr, 'npm install failed')
+            if os.system('npm install'): error(path, addr, 'npm install failed')
 
         if command:
             print('post-receive: running custom command')
-            if os.system(command): error(repo, addr, 'custom command failed')
+            if os.system(command): error(path, addr, 'custom command failed')
     else:
-        error(repo, addr, 'no output directory specified in options.json')
+        error(path, addr, 'no output directory specified in options.json')
 
-    print('post-receive: finished, site should now be live' +
-        (' at ' + url if url else '.'))
+    print('post-receive: finished')
+    if (url):
+        print('post-receive: site should now be live at ' + url)
 
 
 def load_option(options, option_name):
@@ -93,11 +95,11 @@ def move_files(input_dir, output_dir, patterns):
     )
 
 
-def error(repo, addr, error):
+def error(path, addr, error):
     if addr:
-        subject = '{} build failed'.format(repo)
+        subject = '{} build failed'.format(path)
         body = ('{} failed to build correctly at {}\nError message: {}'
-               .format(repo, time.strftime('%c'), error))
+               .format(path, time.strftime('%c'), error))
 
         p = os.popen('mail -s "{}" {}'.format(subject, ' '.join(addr)), 'w')
         p.write(body)

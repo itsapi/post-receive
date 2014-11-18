@@ -1,6 +1,3 @@
 {
-	"output": "/home/git/post-receive",
-	"ignore": [
-		"processing"
-	]
+	"output": "/home/git/deploy/post-receive"
 }

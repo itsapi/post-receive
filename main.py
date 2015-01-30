@@ -86,7 +86,7 @@ def clear_dir(directory, patterns):
 
 def move_files(input_dir, output_dir, patterns):
     print('post-receive: copying files to ' + output_dir)
-    os.system('rsync -r --exclude="{pattern}" {input}/* {out}'
+    os.system('rsync -r --exclude="{pattern}" {input}/. {out}'
         .format(
             pattern = '" --exclude="'.join(patterns),
             input = input_dir,

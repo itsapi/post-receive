@@ -8,9 +8,9 @@ import time
 
 def main():
     arg = 1
-    try: wk_path = sys.argv[i]; arg += 1
+    try: wk_path = sys.argv[arg]; arg += 1
     except IndexError: wk_path = os.getcwd()
-    try: name = sys.argv[i]; arg += 1
+    try: name = sys.argv[arg]; arg += 1
     except IndexError: name = wk_path
 
     os.chdir(wk_path)

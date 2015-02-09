@@ -7,10 +7,11 @@ import time
 
 
 def main():
-    try:
-        wk_path = sys.argv[1]
-    except IndexError:
-        wk_path = os.getcwd()
+    arg = 1
+    try: wk_path = sys.argv[i]; arg += 1
+    except IndexError: wk_path = os.getcwd()
+    try: name = sys.argv[i]; arg += 1
+    except IndexError: name = wk_path
 
     os.chdir(wk_path)
     path = wk_path
@@ -28,11 +29,11 @@ def main():
 
     if grunt_enabled:
         if node_enabled:
-            error(path, addr, 'grunt and node cannot be enabled together')
+            error(name, addr, 'grunt and node cannot be enabled together')
 
         print('post-receive: running grunt')
-        if os.system('npm install'): error(path, addr, 'npm install failed')
-        if os.system('grunt --no-color'): error(path, addr, 'grunt failed')
+        if os.system('npm install'): error(name, addr, 'npm install failed')
+        if os.system('grunt --no-color'): error(name, addr, 'grunt failed')
         if os.path.isdir('src'): wk_path += '/build'
 
     if output_dir:
@@ -49,13 +50,13 @@ def main():
 
         if node_enabled:
             print('post-receive: updating node dependencies')
-            if os.system('npm install'): error(path, addr, 'npm install failed')
+            if os.system('npm install'): error(name, addr, 'npm install failed')
 
         if command:
             print('post-receive: running custom command')
-            if os.system(command): error(path, addr, 'custom command failed')
+            if os.system(command): error(name, addr, 'custom command failed')
     else:
-        error(path, addr, 'no output directory specified in options.json')
+        error(name, addr, 'no output directory specified in options.json')
 
     print('post-receive: finished')
     if (url):
@@ -97,11 +98,11 @@ def move_files(input_dir, output_dir, patterns):
     )
 
 
-def error(path, addr, error):
+def error(name, addr, error):
     if addr:
-        subject = '{} build failed'.format(path)
+        subject = '{} build failed'.format(name)
         body = ('{} failed to build correctly at {}\nError message: {}'
-               .format(path, time.strftime('%c'), error))
+               .format(name, time.strftime('%c'), error))
 
         p = os.popen('mail -s "{}" {}'.format(subject, ' '.join(addr)), 'w')
         p.write(body)

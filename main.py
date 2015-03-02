@@ -14,12 +14,12 @@ def main():
     except IndexError: name = wk_path
 
     os.chdir(wk_path)
-    path = wk_path
 
     with open('options.json') as f:
         options = json.loads(f.read())
 
     output_dir = load_option(options, 'output')
+    build_dir = load_option(options, 'build_dir')
     ignore_list = load_option(options, 'ignore')
     grunt_enabled = load_option(options, 'grunt')
     node_enabled = load_option(options, 'node')
@@ -28,21 +28,18 @@ def main():
     addr = load_option(options, 'email')
 
     if grunt_enabled:
-        if node_enabled:
-            error(name, addr, 'grunt and node cannot be enabled together')
-
         print('post-receive: running grunt')
         if os.system('npm install'): error(name, addr, 'npm install failed')
         if os.system('grunt --no-color'): error(name, addr, 'grunt failed')
-        if os.path.isdir('src'): wk_path += '/build'
 
     if output_dir:
         print('post-receive: outputting to {}'.format(output_dir))
         os.system('mkdir ' + output_dir)
 
         if not ignore_list: ignore_list = []
-        if grunt_enabled: ignore_list += ['package.json', 'Gruntfile.js']
         ignore_list += ['options.json', 'node_modules']
+
+        if build_dir: wk_path = os.path.join(wk_path, build_dir)
 
         clear_dir(output_dir, ignore_list)
         move_files(wk_path, output_dir, ignore_list)

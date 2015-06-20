@@ -21,6 +21,7 @@ def main():
     output_dir = load_option(options, 'output')
     build_dir = load_option(options, 'build_dir')
     ignore_list = load_option(options, 'ignore')
+    build_cmd = load_option(options, 'build_cmd')
     grunt_enabled = load_option(options, 'grunt')
     node_enabled = load_option(options, 'node')
     command = load_option(options, 'command')
@@ -28,9 +29,13 @@ def main():
     addr = load_option(options, 'email')
 
     if grunt_enabled:
-        print('post-receive: running grunt')
+        print('post-receive: grunt option is deprecated - use build_cmd instead')
+        build_cmd = 'grunt'
+
+    if build_cmd:
+        print('post-receive: running {}'.format(build_cmd))
         if os.system('npm install'): error(name, addr, 'npm install failed')
-        if os.system('grunt --no-color'): error(name, addr, 'grunt failed')
+        if os.system(build_cmd): error(name, addr, '{} failed'.format(build_cmd))
 
     if output_dir:
         print('post-receive: outputting to {}'.format(output_dir))

@@ -14,6 +14,7 @@ The `options.json` takes a number of different options for build steps:
 - `ignore`:    `list`,   a list of files and directories in the output directory that should not be overwritten/deleted
 - `grunt`:     `bool`,   should grunt be run during processing?
 - `node`:      `bool`,   should npm install be run in the output directory?
+- `build_cmd`: `string`, a shell command to be run in repository root at processing stage
 - `command`:   `string`, a shell command to be run in output directory after processing
 - `url`:       `string`, a link to be displayed after processing on the github listener output
 - `email`:     `list`,   a list of email addresses to send error messages if the build fails

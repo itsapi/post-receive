@@ -25,9 +25,7 @@ def main():
     url = load_option(options, 'url')
     email = load_option(options, 'email')
 
-    if grunt_enabled:
-        print('post-receive: grunt option is deprecated - use build_cmd instead')
-        build_cmd = 'grunt'
+    if build_cmd: run_commands(build_cmd)
 
     if build_cmd:
         print('post-receive: running {}'.format(build_cmd))
@@ -43,9 +41,7 @@ def main():
 
         if build_dir: wk_path = os.path.join(wk_path, build_dir)
 
-        clear_dir(output_dir, ignore_list)
-        move_files(wk_path, output_dir, ignore_list)
-        os.chdir(output_dir)
+        if output_cmd: run_commands(output_cmd)
 
         if node_enabled:
             print('post-receive: updating node dependencies')
@@ -71,6 +67,12 @@ def load_option(options, option_name):
         return options[option_name]
     except KeyError:
         return False
+
+
+def run_commands(commands):
+    for cmd in commands:
+        log('running {}'.format(cmd))
+        if os.system(cmd): error(name, email, '{} failed'.format(cmd))
 
 
 def clear_dir(directory, patterns):

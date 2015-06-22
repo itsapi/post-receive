@@ -61,7 +61,7 @@ def load_option(options, option_name):
 
 def run_commands(commands):
     for cmd in commands:
-        log('running {}'.format(cmd))
+        log('running "{}"'.format(cmd))
         if os.system(cmd): error(name, email, '{} failed'.format(cmd))
 
 

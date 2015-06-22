@@ -28,7 +28,6 @@ def main():
     if build_cmd: run_commands(build_cmd)
 
     if copy_to:
-        log('outputting to {}'.format(copy_to))
         os.system('mkdir ' + copy_to)
 
         if not ignore: ignore = []

@@ -89,18 +89,18 @@ def move_files(input_dir, copy_to, patterns):
         .format(
             pattern = '" --exclude="'.join(patterns),
             input = input_dir,
-            out = output_dir
+            out = copy_to
         )
     )
 
 
-def error(name, addr, error):
-    if addr:
+def error(name, email, error):
+    if email:
         subject = '{} build failed'.format(name)
         body = ('{} failed to build correctly at {}\nError message: {}'
                .format(name, time.strftime('%c'), error))
 
-        p = os.popen('mail -s "{}" {}'.format(subject, ' '.join(addr)), 'w')
+        p = os.popen('mail -s "{}" {}'.format(subject, ' '.join(email)), 'w')
         p.write(body)
         p.close()
 

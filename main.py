@@ -42,13 +42,6 @@ def main():
 
         if output_cmd: run_commands(output_cmd)
 
-        if node_enabled:
-            print('post-receive: updating node dependencies')
-            if os.system('npm install'): error(name, addr, 'npm install failed')
-
-        if command:
-            print('post-receive: running custom command')
-            if os.system(command): error(name, addr, 'custom command failed')
     else:
         error(name, email, 'no output directory specified in options.json')
 

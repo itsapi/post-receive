@@ -57,11 +57,7 @@ def load_option(options, option_name):
     try:
         return options['hosts'][os.uname()[1]][option_name]
     except KeyError:
-        pass
-    try:
-        return options[option_name]
-    except KeyError:
-        return False
+        return options.get(option_name)
 
 
 def run_commands(commands):

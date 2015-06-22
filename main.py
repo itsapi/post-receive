@@ -17,15 +17,13 @@ def main():
 
     options = json.load(open('options.json'))
 
-    output_dir = load_option(options, 'output')
-    build_dir = load_option(options, 'build_dir')
-    ignore_list = load_option(options, 'ignore')
     build_cmd = load_option(options, 'build_cmd')
-    grunt_enabled = load_option(options, 'grunt')
-    node_enabled = load_option(options, 'node')
-    command = load_option(options, 'command')
+    copy_from = load_option(options, 'copy_from')
+    copy_to = load_option(options, 'copy_to')
+    output_cmd = load_option(options, 'output_cmd')
+    ignore = load_option(options, 'ignore')
     url = load_option(options, 'url')
-    addr = load_option(options, 'email')
+    email = load_option(options, 'email')
 
     if grunt_enabled:
         print('post-receive: grunt option is deprecated - use build_cmd instead')

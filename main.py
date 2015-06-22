@@ -15,8 +15,7 @@ def main():
 
     os.chdir(wk_path)
 
-    with open('options.json') as f:
-        options = json.loads(f.read())
+    options = json.load(open('options.json'))
 
     output_dir = load_option(options, 'output')
     build_dir = load_option(options, 'build_dir')

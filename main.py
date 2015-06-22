@@ -27,19 +27,18 @@ def main():
 
     if build_cmd: run_commands(build_cmd)
 
-    if build_cmd:
-        print('post-receive: running {}'.format(build_cmd))
-        if os.system('npm install'): error(name, addr, 'npm install failed')
-        if os.system(build_cmd): error(name, addr, '{} failed'.format(build_cmd))
+    if copy_to:
+        log('outputting to {}'.format(copy_to))
+        os.system('mkdir ' + copy_to)
 
-    if output_dir:
-        print('post-receive: outputting to {}'.format(output_dir))
-        os.system('mkdir ' + output_dir)
+        if not ignore: ignore = []
+        ignore += ['options.json', 'node_modules']
 
-        if not ignore_list: ignore_list = []
-        ignore_list += ['options.json', 'node_modules']
+        if copy_from: wk_path = os.path.join(wk_path, copy_from)
 
-        if build_dir: wk_path = os.path.join(wk_path, build_dir)
+        clear_dir(copy_to, ignore)
+        move_files(wk_path, copy_to, ignore)
+        os.chdir(copy_to)
 
         if output_cmd: run_commands(output_cmd)
 
@@ -51,11 +50,14 @@ def main():
             print('post-receive: running custom command')
             if os.system(command): error(name, addr, 'custom command failed')
     else:
-        error(name, addr, 'no output directory specified in options.json')
+        error(name, email, 'no output directory specified in options.json')
 
-    print('post-receive: finished')
-    if (url):
-        print('post-receive: site should now be live at ' + url)
+    log('finished')
+    if (url): log('site should now be live at ' + url)
+
+
+def log(string):
+    print('post-receive:', string)
 
 
 def load_option(options, option_name):
@@ -79,7 +81,7 @@ def clear_dir(directory, patterns):
     wk_path = os.getcwd()
     os.chdir(directory)
 
-    print('post-receive: removing files from ' + directory)
+    log('removing files from ' + directory)
     patterns = [(p + '/*' if os.path.isdir(p) else p) for p in patterns]
 
     d = "' ! -path './"
@@ -88,8 +90,8 @@ def clear_dir(directory, patterns):
     os.chdir(wk_path)
 
 
-def move_files(input_dir, output_dir, patterns):
-    print('post-receive: copying files to ' + output_dir)
+def move_files(input_dir, copy_to, patterns):
+    log('copying files to ' + copy_to)
     os.system('rsync -r --exclude="{pattern}" {input}/. {out}'
         .format(
             pattern = '" --exclude="'.join(patterns),

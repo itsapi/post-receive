@@ -15,72 +15,61 @@ def main():
 
     os.chdir(wk_path)
 
-    with open('options.json') as f:
-        options = json.loads(f.read())
+    options = json.load(open('options.json'))
 
-    output_dir = load_option(options, 'output')
-    build_dir = load_option(options, 'build_dir')
-    ignore_list = load_option(options, 'ignore')
     build_cmd = load_option(options, 'build_cmd')
-    grunt_enabled = load_option(options, 'grunt')
-    node_enabled = load_option(options, 'node')
-    command = load_option(options, 'command')
+    copy_from = load_option(options, 'copy_from')
+    copy_to = load_option(options, 'copy_to')
+    output_cmd = load_option(options, 'output_cmd')
+    ignore = load_option(options, 'ignore')
     url = load_option(options, 'url')
-    addr = load_option(options, 'email')
+    email = load_option(options, 'email')
 
-    if grunt_enabled:
-        print('post-receive: grunt option is deprecated - use build_cmd instead')
-        build_cmd = 'grunt'
+    if build_cmd: run_commands(build_cmd)
 
-    if build_cmd:
-        print('post-receive: running {}'.format(build_cmd))
-        if os.system('npm install'): error(name, addr, 'npm install failed')
-        if os.system(build_cmd): error(name, addr, '{} failed'.format(build_cmd))
+    if copy_to:
+        os.system('mkdir ' + copy_to)
 
-    if output_dir:
-        print('post-receive: outputting to {}'.format(output_dir))
-        os.system('mkdir ' + output_dir)
+        if not ignore: ignore = []
+        ignore += ['options.json', 'node_modules']
 
-        if not ignore_list: ignore_list = []
-        ignore_list += ['options.json', 'node_modules']
+        if copy_from: wk_path = os.path.join(wk_path, copy_from)
 
-        if build_dir: wk_path = os.path.join(wk_path, build_dir)
+        clear_dir(copy_to, ignore)
+        move_files(wk_path, copy_to, ignore)
+        os.chdir(copy_to)
 
-        clear_dir(output_dir, ignore_list)
-        move_files(wk_path, output_dir, ignore_list)
-        os.chdir(output_dir)
+        if output_cmd: run_commands(output_cmd)
 
-        if node_enabled:
-            print('post-receive: updating node dependencies')
-            if os.system('npm install'): error(name, addr, 'npm install failed')
-
-        if command:
-            print('post-receive: running custom command')
-            if os.system(command): error(name, addr, 'custom command failed')
     else:
-        error(name, addr, 'no output directory specified in options.json')
+        error(name, email, 'no output directory specified in options.json')
 
-    print('post-receive: finished')
-    if (url):
-        print('post-receive: site should now be live at ' + url)
+    log('finished')
+    if (url): log('site should now be live at ' + url)
+
+
+def log(string):
+    print('post-receive:', string)
 
 
 def load_option(options, option_name):
     try:
         return options['hosts'][os.uname()[1]][option_name]
     except KeyError:
-        pass
-    try:
-        return options[option_name]
-    except KeyError:
-        return False
+        return options.get(option_name)
+
+
+def run_commands(commands):
+    for cmd in commands:
+        log('running "{}"'.format(cmd))
+        if os.system(cmd): error(name, email, '{} failed'.format(cmd))
 
 
 def clear_dir(directory, patterns):
     wk_path = os.getcwd()
     os.chdir(directory)
 
-    print('post-receive: removing files from ' + directory)
+    log('removing files from ' + directory)
     patterns = [(p + '/*' if os.path.isdir(p) else p) for p in patterns]
 
     d = "' ! -path './"
@@ -89,24 +78,24 @@ def clear_dir(directory, patterns):
     os.chdir(wk_path)
 
 
-def move_files(input_dir, output_dir, patterns):
-    print('post-receive: copying files to ' + output_dir)
+def move_files(input_dir, copy_to, patterns):
+    log('copying files to ' + copy_to)
     os.system('rsync -r --exclude="{pattern}" {input}/. {out}'
         .format(
             pattern = '" --exclude="'.join(patterns),
             input = input_dir,
-            out = output_dir
+            out = copy_to
         )
     )
 
 
-def error(name, addr, error):
-    if addr:
+def error(name, email, error):
+    if email:
         subject = '{} build failed'.format(name)
         body = ('{} failed to build correctly at {}\nError message: {}'
                .format(name, time.strftime('%c'), error))
 
-        p = os.popen('mail -s "{}" {}'.format(subject, ' '.join(addr)), 'w')
+        p = os.popen('mail -s "{}" {}'.format(subject, ' '.join(email)), 'w')
         p.write(body)
         p.close()
 

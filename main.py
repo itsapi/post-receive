@@ -25,7 +25,7 @@ def main():
     url = load_option(options, 'url')
     email = load_option(options, 'email')
 
-    if build_cmd: run_commands(build_cmd)
+    if build_cmd: run_commands(build_cmd, name, email)
 
     if copy_to:
         os.system('mkdir ' + copy_to)
@@ -39,7 +39,7 @@ def main():
         move_files(wk_path, copy_to, ignore)
         os.chdir(copy_to)
 
-        if start_cmd: run_commands(start_cmd)
+        if start_cmd: run_commands(start_cmd, name, email)
 
     else:
         error(name, email, 'no output directory specified in options.json')
@@ -59,7 +59,7 @@ def load_option(options, option_name):
         return options.get(option_name)
 
 
-def run_commands(commands):
+def run_commands(commands, name, email):
     for cmd in commands:
         log('running "{}"'.format(cmd))
         if os.system(cmd): error(name, email, '{} failed'.format(cmd))

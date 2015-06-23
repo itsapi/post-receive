@@ -1,8 +1,8 @@
 {
-	"output": "/home/git/deploy/post-receive",
-	"hosts": {
-		"oliverfaircliff": {
-			"output": "/opt/ptr"
-		}
-	}
+    "copy_to": "/home/git/deploy/post-receive",
+    "hosts": {
+        "oliverfaircliff": {
+            "copy_to": "/opt/ptr"
+        }
+    }
 }

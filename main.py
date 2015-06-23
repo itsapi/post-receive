@@ -20,7 +20,7 @@ def main():
     build_cmd = load_option(options, 'build_cmd')
     copy_from = load_option(options, 'copy_from')
     copy_to = load_option(options, 'copy_to')
-    output_cmd = load_option(options, 'output_cmd')
+    start_cmd = load_option(options, 'start_cmd')
     ignore = load_option(options, 'ignore')
     url = load_option(options, 'url')
     email = load_option(options, 'email')
@@ -39,7 +39,7 @@ def main():
         move_files(wk_path, copy_to, ignore)
         os.chdir(copy_to)
 
-        if output_cmd: run_commands(output_cmd)
+        if start_cmd: run_commands(start_cmd)
 
     else:
         error(name, email, 'no output directory specified in options.json')

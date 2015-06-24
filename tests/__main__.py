@@ -64,5 +64,18 @@ class FailureTests(unittest.TestCase):
         self.assertFalse(diff('tests/expected/start_cmd_failed', 'tests/output/start_cmd_failed'))
 
 
+class CombinationTests(unittest.TestCase):
+
+    def test_combo_one(self):
+        setup('combo_one')
+        self.assertFalse(pr.process(['tests/fixtures/processing']))
+        self.assertFalse(diff('tests/expected/combo_one', 'tests/output/combo_one'))
+
+    def test_combo_two(self):
+        setup('combo_two')
+        self.assertFalse(pr.process(['tests/fixtures/processing']))
+        self.assertFalse(diff('tests/expected/combo_two', 'tests/output/combo_two'))
+
+
 if __name__ == '__main__':
     unittest.main()

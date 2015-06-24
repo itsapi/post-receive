@@ -1,0 +1,6 @@
+{
+  "copy_from": "src",
+  "build_cmd": ["cat src/footnote.html >> src/index.html", "rm src/footnote.html"],
+  "copy_to": "../../output/combo_one",
+  "start_cmd": ["sed -i 's/<!-- .* -->/<!-- new message -->/' index.html"]
+}

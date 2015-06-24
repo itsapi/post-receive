@@ -1,0 +1,7 @@
+{
+  "copy_from": "src",
+  "build_cmd": ["cp src/footnote.html ../../output/combo_two", "echo 'asdf' > src/footnote.html"],
+  "copy_to": "../../output/combo_two",
+  "start_cmd": ["mkdir images", "mv logo.png images"],
+  "ignore": ["footnote.html"]
+}

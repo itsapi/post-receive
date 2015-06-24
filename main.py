@@ -35,10 +35,8 @@ def process(args):
         if not ignore: ignore = []
         ignore += ['options.json', 'node_modules']
 
-        if copy_from: os.chdir(copy_from)
-
         clear_dir(copy_to, ignore)
-        move_files(copy_to, ignore)
+        move_files(copy_from, copy_to, ignore)
         os.chdir(copy_to)
 
         if start_cmd: run_commands(start_cmd, name, email)
@@ -81,11 +79,12 @@ def clear_dir(directory, patterns):
     os.chdir(wk_path)
 
 
-def move_files(copy_to, patterns):
+def move_files(copy_from, copy_to, patterns):
     log('copying files to ' + copy_to)
-    os.system('rsync -r --exclude="{pattern}" . {out}'
+    os.system('rsync -r --exclude="{pattern}" {input}/. {out}'
         .format(
             pattern = '" --exclude="'.join(patterns),
+            input = copy_from if copy_from else '.',
             out = copy_to
         )
     )

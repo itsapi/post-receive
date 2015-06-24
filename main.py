@@ -16,7 +16,8 @@ def process(args):
     orig_cwd = os.getcwd()
     os.chdir(wk_path)
 
-    options = json.load(open('options.json'))
+    with open('options.json') as f:
+      options = json.load(f)
 
     build_cmd = load_option(options, 'build_cmd')
     copy_from = load_option(options, 'copy_from')

@@ -28,7 +28,7 @@ def main():
     if build_cmd: run_commands(build_cmd, name, email)
 
     if copy_to:
-        os.system('mkdir ' + copy_to)
+        os.system('mkdir -p ' + copy_to)
 
         if not ignore: ignore = []
         ignore += ['options.json', 'node_modules']

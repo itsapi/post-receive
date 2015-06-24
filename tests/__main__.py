@@ -9,8 +9,8 @@ def diff(expected, actual):
 
 def setup(name):
     os.system('mkdir -p tests/fixtures/processing')
-    os.system('rm -r tests/fixtures/processing/*')
-    os.system('cp -r tests/fixtures/input/* tests/fixtures/processing/')
+    os.system('rm -r tests/fixtures/processing/.')
+    os.system('cp -r tests/fixtures/input/. tests/fixtures/processing/')
     os.system('cp tests/fixtures/{}.json tests/fixtures/processing/options.json'.format(name))
 
 

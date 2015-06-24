@@ -76,7 +76,7 @@ def clear_dir(directory, patterns):
     os.chdir(directory)
 
     log('removing files from ' + directory)
-    patterns = [(p + '/*' if os.path.isdir(p) else p) for p in patterns]
+    patterns = [(p + '/.' if os.path.isdir(p) else p) for p in patterns]
 
     d = "' ! -path './"
     cmd = "find . ! -path './{}' -delete".format(d.join(patterns))

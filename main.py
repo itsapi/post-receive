@@ -6,11 +6,11 @@ import json
 import time
 
 
-def main():
-    arg = 1
-    try: wk_path = sys.argv[arg]; arg += 1
+def process(args):
+    arg = 0
+    try: wk_path = args[arg]; arg += 1
     except IndexError: wk_path = os.getcwd()
-    try: name = sys.argv[arg]; arg += 1
+    try: name = args[arg]; arg += 1
     except IndexError: name = wk_path
 
     os.chdir(wk_path)
@@ -102,4 +102,4 @@ def error(name, email, error):
 
 
 if __name__ == '__main__':
-    main()
+    process(sys.argv[1:])

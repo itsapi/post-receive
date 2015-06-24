@@ -1,6 +1,8 @@
 Post Receive
 ============
 
+[![Build Status](https://img.shields.io/travis/itsapi/post-receive.svg)](https://travis-ci.org/itsapi/post-receive)
+
 These scripts are run after code is pushed to the server. They compile everything and deploy to the correct location.
 
 [github-listener](http://github.com/itsapi/github-listener) runs this script for each repository after fetching the files from Github.

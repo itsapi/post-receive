@@ -10,15 +10,21 @@ orig_cwd = os.getcwd()
 
 def process(args):
     arg = 0
-    try: wk_path = args[arg]; arg += 1
-    except IndexError: wk_path = os.getcwd()
-    try: name = args[arg]; arg += 1
-    except IndexError: name = wk_path
+    try:
+        wk_path = args[arg]
+        arg += 1
+    except IndexError:
+        wk_path = os.getcwd()
+    try:
+        name = args[arg]
+        arg += 1
+    except IndexError:
+        name = wk_path
 
     os.chdir(wk_path)
 
     with open('options.json') as f:
-      options = json.load(f)
+        options = json.load(f)
 
     build_cmd = load_option(options, 'build_cmd')
     copy_from = load_option(options, 'copy_from')
@@ -28,26 +34,30 @@ def process(args):
     url = load_option(options, 'url')
     email = load_option(options, 'email')
 
-    if build_cmd: run_commands(build_cmd, name, email)
+    if build_cmd:
+        run_commands(build_cmd, name, email)
 
     if copy_to:
         os.system('mkdir -p ' + copy_to)
 
-        if not ignore: ignore = []
+        if not ignore:
+            ignore = []
         ignore += ['options.json', 'node_modules']
 
         clear_dir(copy_to, ignore)
         move_files(copy_from, copy_to, ignore)
         os.chdir(copy_to)
 
-        if start_cmd: run_commands(start_cmd, name, email)
+        if start_cmd:
+            run_commands(start_cmd, name, email)
 
     else:
         error(name, email, 'no output directory specified in options.json')
 
     exit()
     log('finished')
-    if (url): log('site should now be live at ' + url)
+    if (url):
+        log('site should now be live at ' + url)
 
 
 def exit():
@@ -68,7 +78,8 @@ def load_option(options, option_name):
 def run_commands(commands, name, email):
     for cmd in commands:
         log('running "{}"'.format(cmd))
-        if os.system(cmd): error(name, email, '{} failed'.format(cmd))
+        if os.system(cmd):
+            error(name, email, '{} failed'.format(cmd))
 
 
 def clear_dir(directory, patterns):
@@ -87,26 +98,26 @@ def clear_dir(directory, patterns):
 def move_files(copy_from, copy_to, patterns):
     log('copying files to ' + copy_to)
     os.system('rsync -r --exclude="{pattern}" {input}/. {out}'
-        .format(
-            pattern = '" --exclude="'.join(patterns),
-            input = copy_from if copy_from else '.',
-            out = copy_to
-        )
-    )
+              .format(
+                  pattern='" --exclude="'.join(patterns),
+                  input=copy_from if copy_from else '.',
+                  out=copy_to
+              )
+              )
 
 
 def error(name, email, error):
     if email:
         subject = '{} build failed'.format(name)
         body = ('{} failed to build correctly at {}\nError message: {}'
-               .format(name, time.strftime('%c'), error))
+                .format(name, time.strftime('%c'), error))
 
         p = os.popen('mail -s "{}" {}'.format(subject, ' '.join(email)), 'w')
         p.write(body)
         p.close()
 
     exit()
-    sys.exit('post-receive [error]: '+error)
+    sys.exit('post-receive [error]: ' + error)
 
 
 if __name__ == '__main__':

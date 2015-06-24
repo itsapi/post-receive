@@ -6,6 +6,8 @@ import json
 import time
 
 
+orig_cwd = os.getcwd()
+
 def process(args):
     arg = 0
     try: wk_path = args[arg]; arg += 1
@@ -13,7 +15,6 @@ def process(args):
     try: name = args[arg]; arg += 1
     except IndexError: name = wk_path
 
-    orig_cwd = os.getcwd()
     os.chdir(wk_path)
 
     with open('options.json') as f:
@@ -44,9 +45,13 @@ def process(args):
     else:
         error(name, email, 'no output directory specified in options.json')
 
+    exit()
     log('finished')
-    os.chdir(orig_cwd)
     if (url): log('site should now be live at ' + url)
+
+
+def exit():
+    os.chdir(orig_cwd)
 
 
 def log(string):
@@ -100,6 +105,7 @@ def error(name, email, error):
         p.write(body)
         p.close()
 
+    exit()
     sys.exit('post-receive [error]: '+error)
 
 

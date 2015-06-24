@@ -9,12 +9,6 @@ def diff(expected, actual):
 
 class OptionsTests(unittest.TestCase):
 
-    def setUp(self):
-        self.cwd = os.getcwd()
-
-    def tearDown(self):
-        os.chdir(self.cwd)
-
     def test_build_cmd(self):
         self.assertFalse(pr.process(['tests/fixtures/build_cmd']))
         self.assertFalse(diff('tests/expected/build_cmd', 'tests/output/build_cmd'))
@@ -37,12 +31,6 @@ class OptionsTests(unittest.TestCase):
 
 
 class FailureTests(unittest.TestCase):
-
-    def setUp(self):
-        self.cwd = os.getcwd()
-
-    def tearDown(self):
-        os.chdir(self.cwd)
 
     def test_no_copy_to(self):
         with self.assertRaises(SystemExit) as cm:

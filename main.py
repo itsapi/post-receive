@@ -13,6 +13,7 @@ def process(args):
     try: name = args[arg]; arg += 1
     except IndexError: name = wk_path
 
+    orig_cwd = os.getcwd()
     os.chdir(wk_path)
 
     options = json.load(open('options.json'))
@@ -45,6 +46,7 @@ def process(args):
         error(name, email, 'no output directory specified in options.json')
 
     log('finished')
+    os.chdir(orig_cwd)
     if (url): log('site should now be live at ' + url)
 
 

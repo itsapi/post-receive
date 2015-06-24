@@ -1,0 +1,4 @@
+{
+  "start_cmd": ["exit 1"],
+  "copy_to": "../../output/start_cmd_failed"
+}

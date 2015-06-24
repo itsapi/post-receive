@@ -1,4 +1,4 @@
 {
-  "build_cmd": ["echo 1234 > asdf"],
+  "start_cmd": ["echo 1234 > asdf"],
   "copy_to": "../../output/start_cmd"
 }

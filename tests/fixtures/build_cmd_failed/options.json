@@ -1,0 +1,4 @@
+{
+  "build_cmd": ["exit 1"],
+  "copy_to": "../../output/build_cmd_failed"
+}

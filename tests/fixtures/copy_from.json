@@ -1,0 +1,4 @@
+{
+  "copy_from": "src",
+  "copy_to": "../../output/copy_from"
+}

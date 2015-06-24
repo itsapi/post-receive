@@ -1,0 +1,4 @@
+{
+  "copy_to": "../../output/start_cmd",
+  "start_cmd": ["echo 1234 > pid"]
+}

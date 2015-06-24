@@ -1,4 +1,0 @@
-{
-  "copy_to": "../../output/ignore",
-  "ignore": ["ignore_from", "ignore_dir"]
-}

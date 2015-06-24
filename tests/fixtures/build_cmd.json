@@ -1,0 +1,4 @@
+{
+  "build_cmd": ["cat src/footnote.html >> src/index.html", "rm src/footnote.html"],
+  "copy_to": "../../output/build_cmd"
+}

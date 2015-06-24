@@ -8,7 +8,7 @@ python:
   - '3.4'
   - 'nightly'
 
-script: ./test.sh
+script: python -m tests
 
 notifications:
   webhooks:

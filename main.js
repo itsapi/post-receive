@@ -2,7 +2,7 @@ var os = require('os'),
     exec = require('child_process').execSync,
     format = require('string-format');
 
-format.extend(String.prototype)
+format.extend(String.prototype);
 
 
 function PostReceive(options) {
@@ -14,62 +14,63 @@ function PostReceive(options) {
   this.name = args.shift() || this.wk_path;
 }
 
-PostReceive.prototype.process = function () {
+PostReceive.prototype.process = function() {
+  var self = this;
 
   orig_cwd = process.cwd();
-  process.chdir(this.wk_path);
+  process.chdir(self.wk_path);
 
-  this.options = require('./options.json');
-  this.load_options();
+  self.options = require('./options.json');
+  self.load_options();
 
-  if (this.options.build_cmd) {
-    run_commands(this.options.build_cmd);
+  if (self.options.build_cmd) {
+    run_commands(self.options.build_cmd);
   }
 
-  if (this.options.copy_to) {
-    os.system('mkdir -p ' + this.options.copy_to)
+  if (self.options.copy_to) {
+    exec('mkdir -p ' + self.options.copy_to);
 
-    this.options.ignore = (this.options.ignore || []).concat(['options.json', 'node_modules'])
+    self.options.ignore = (self.options.ignore || []).concat(['options.json', 'node_modules']);
 
-    clear_dir(copy_to, ignore)
-    move_files(copy_from, copy_to, ignore)
-    process.chdir(this.options.copy_to)
+    clear_dir(copy_to, ignore);
+    move_files(copy_from, copy_to, ignore);
+    process.chdir(self.options.copy_to);
 
-    if (this.options.start_cmd) {
-      run_commands(this.options.start_cmd)
+    if (self.options.start_cmd) {
+      run_commands(self.options.start_cmd);
     }
 
   } else {
-    this.error('no output directory specified in options.json')
+    self.error('no output directory specified in options.json');
   }
 
-  this.log('finished')
-  process.chdir(orig_cwd)
+  self.log('finished');
+  process.chdir(orig_cwd);
 
-  if (this.options.url) {
-    this.log('site should now be live at ' + this.options.url);
+  if (self.options.url) {
+    self.log('site should now be live at ' + self.options.url);
   }
 };
 
-PostReceive.prototype.log = function (message) {
+PostReceive.prototype.log = function(message) {
   if (this.logging) {
     console.log('post-receive:', message);
   }
 };
 
-PostReceive.prototype.load_options = function () {
+PostReceive.prototype.load_options = function() {
   for (var option in (this.options.hosts && this.options.hosts[os.hostname()])) {
     this.options[option] = this.options.hosts[os.hostname()][option];
   }
 };
 
-PostReceive.prototype.run_commands = function (commands) {
+PostReceive.prototype.run_commands = function(commands) {
   var self = this;
 
-  commands.forEach(function (cmd) {
+  commands.forEach(function(cmd) {
     self.log('running "{}"'.format(cmd));
 
-    exec(cmd, function (error, stdout, stderr) {
+    exec(cmd, function(error, stdout, stderr) {
       if (error) {
         self.error('{} failed'.format(cmd));
       }
@@ -85,7 +86,7 @@ function clear_dir(directory, patterns) {
   process.chdir(directory);
 
   self.log('removing files from ' + directory);
-  pattern = patterns.map(function (p) {
+  pattern = patterns.map(function(p) {
     return fs.lstatSync(p).isDirectory() ? p + '/*' : p;
   });
 
@@ -93,7 +94,7 @@ function clear_dir(directory, patterns) {
   var cmd = "find . ! -path './{}' -delete".format(patterns.join(d));
 
   try {
-    exec(cmd, function (error, stdout, stderr) {
+    exec(cmd, function(error, stdout, stderr) {
 
     });
   } catch {

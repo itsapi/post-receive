@@ -4,3 +4,4 @@ output
 *.pyc
 processing
 node_modules
+npm-debug.log

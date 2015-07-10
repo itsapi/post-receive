@@ -1,4 +1,4 @@
-var octocat = $('img');
+var octocat = document.getElementById('img');
 
 octocat.on('click', function (e) {
   e.preventDefault();

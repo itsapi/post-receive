@@ -1,4 +1,5 @@
 var os = require('os');
+var fs = require('fs');
 var exec = require('child_process').execSync;
 var format = require('string-format');
 var nodemailer = require('nodemailer');
@@ -8,7 +9,17 @@ var transporter = nodemailer.createTransport();
 format.extend(String.prototype);
 
 
-function PostReceive(options) {
+function run_cmd(cmd, cb) {
+  cb = cb || function () {};
+  try {
+    cb(null, exec(cmd));
+  } catch (e) {
+    cb(e, null);
+  }
+}
+
+
+var PostReceive = function(options) {
   var self = this;
 
   options = options || {};
@@ -18,29 +29,29 @@ function PostReceive(options) {
   self.options = options.config;
 
   self.load_options();
-}
+};
 
 PostReceive.prototype.process = function() {
   var self = this;
 
-  orig_cwd = process.cwd();
+  var orig_cwd = process.cwd();
   process.chdir(self.wk_path);
 
   if (self.options.build_cmd) {
-    run_commands(self.options.build_cmd);
+    self.run_commands(self.options.build_cmd);
   }
 
   if (self.options.copy_to) {
-    exec('mkdir -p ' + self.options.copy_to);
+    run_cmd('mkdir -p ' + self.options.copy_to);
 
     self.options.ignore = (self.options.ignore || []).concat(['options.json', 'node_modules']);
 
-    clear_dir(copy_to, ignore);
-    move_files(copy_from, copy_to, ignore);
+    self.clear_dir();
+    self.move_files();
     process.chdir(self.options.copy_to);
 
     if (self.options.start_cmd) {
-      run_commands(self.options.start_cmd);
+      self.run_commands(self.options.start_cmd);
     }
 
   } else {
@@ -62,8 +73,10 @@ PostReceive.prototype.log = function(message) {
 };
 
 PostReceive.prototype.load_options = function() {
-  for (var option in (this.options.hosts && this.options.hosts[os.hostname()])) {
-    this.options[option] = this.options.hosts[os.hostname()][option];
+  var self = this;
+
+  for (var option in (self.options.hosts && self.options.hosts[os.hostname()])) {
+    self.options[option] = self.options.hosts[os.hostname()][option];
   }
 };
 
@@ -73,36 +86,43 @@ PostReceive.prototype.run_commands = function(commands) {
   commands.forEach(function(cmd) {
     self.log('running "{}"'.format(cmd));
 
-    exec(cmd, function(error, stdout, stderr) {
-      if (error) {
+    run_cmd(cmd, function(err) {
+      if (err) {
         self.error('{} failed'.format(cmd));
       }
     });
   });
 };
 
-
-PostReceive.prototype.clear_dir = function(directory, patterns) {
+PostReceive.prototype.clear_dir = function() {
   var self = this;
 
-  var wk_path = os.getcwd();
+  var wk_path = process.cwd();
+  var directory = self.options.copy_to;
+  var patterns = self.options.ignore;
+
   process.chdir(directory);
 
   self.log('removing files from ' + directory);
-  pattern = patterns.map(function(p) {
-    return fs.lstatSync(p).isDirectory() ? p + '/*' : p;
+  patterns = patterns.map(function(p) {
+    return fs.existsSync(p) && fs.lstatSync(p).isDirectory() ? p + '/*' : p;
   });
 
   var d = "' ! -path './";
   var cmd = "find . ! -path './{}' -delete".format(patterns.join(d));
 
-  exec(cmd);
-  os.chdir(wk_path);
+  run_cmd(cmd);
+  process.chdir(wk_path);
 };
 
+PostReceive.prototype.move_files = function() {
+  var self = this;
 
-PostReceive.prototype.move_files = function(copy_from, copy_to, patterns) {
-  this.log('copying files to ' + copy_to);
+  var copy_from = self.options.copy_from;
+  var copy_to = self.options.copy_to;
+  var patterns = self.options.ignore;
+
+  self.log('copying files to ' + copy_to);
 
   var cmd = 'rsync -r --exclude="{pattern}" {input}/. {out}'.format({
     pattern: patterns.join('" --exclude="'),
@@ -110,21 +130,22 @@ PostReceive.prototype.move_files = function(copy_from, copy_to, patterns) {
     out: copy_to
   });
 
-  exec(cmd);
+  run_cmd(cmd);
 };
-
 
 PostReceive.prototype.error = function(message) {
   var self = this;
 
+  var name = self.wk_path;
+
   if (self.options.email) {
     var subject = name + ' build failed';
     var body = '{} failed to build correctly at {}\nError message: {}'
-                .format(self.wk_path, Date.toString(), message);
+                .format(name, Date.toString(), message);
 
     transporter.sendMail({
       to: self.options.email,
-      subject: message,
+      subject: subject,
       text: body
     });
   }
@@ -132,3 +153,6 @@ PostReceive.prototype.error = function(message) {
   this.log('post-receive [error]: ' + message);
   process.exit(1);
 };
+
+
+module.exports = PostReceive;

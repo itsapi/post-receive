@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 var os = require('os');
 var exec = require('child_process').execSync;
 var format = require('string-format');
@@ -11,12 +9,15 @@ format.extend(String.prototype);
 
 
 function PostReceive(options) {
-  options = options || {};
-  this.logging = options.logging;
+  var self = this;
 
-  this.args = process.argv.slice(2);
-  this.wk_path = args.shift() || process.cwd();
-  this.name = args.shift() || this.wk_path;
+  options = options || {};
+
+  self.wk_path = options.cwd;
+  self.logging = options.logging;
+  self.options = options.config;
+
+  self.load_options();
 }
 
 PostReceive.prototype.process = function() {
@@ -24,9 +25,6 @@ PostReceive.prototype.process = function() {
 
   orig_cwd = process.cwd();
   process.chdir(self.wk_path);
-
-  self.options = require('./options.json');
-  self.load_options();
 
   if (self.options.build_cmd) {
     run_commands(self.options.build_cmd);
@@ -122,7 +120,7 @@ PostReceive.prototype.error = function(message) {
   if (self.options.email) {
     var subject = name + ' build failed';
     var body = '{} failed to build correctly at {}\nError message: {}'
-                .format(self.name, Date.toString(), message);
+                .format(self.wk_path, Date.toString(), message);
 
     transporter.sendMail({
       to: self.options.email,

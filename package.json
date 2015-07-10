@@ -1,0 +1,27 @@
+{
+  "name": "post-receive",
+  "version": "1.0.0",
+  "description": "The scripts we use to get stuff in the right place on the server.",
+  "main": "main.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "nodemailer": "^1.4.0",
+    "string-format": "^0.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itsapi/post-receive.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/itsapi/post-receive/issues"
+  },
+  "homepage": "https://github.com/itsapi/post-receive#readme"
+}

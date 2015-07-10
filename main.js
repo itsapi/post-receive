@@ -1,7 +1,12 @@
-var os = require('os'),
-    exec = require('child_process').execSync,
-    format = require('string-format');
+#!/usr/bin/env node
 
+var os = require('os');
+var exec = require('child_process').execSync;
+var format = require('string-format');
+var nodemailer = require('nodemailer');
+
+
+var transporter = nodemailer.createTransport();
 format.extend(String.prototype);
 
 
@@ -79,7 +84,7 @@ PostReceive.prototype.run_commands = function(commands) {
 };
 
 
-function clear_dir(directory, patterns) {
+PostReceive.prototype.clear_dir = function(directory, patterns) {
   var self = this;
 
   var wk_path = os.getcwd();
@@ -93,41 +98,39 @@ function clear_dir(directory, patterns) {
   var d = "' ! -path './";
   var cmd = "find . ! -path './{}' -delete".format(patterns.join(d));
 
-  try {
-    exec(cmd, function(error, stdout, stderr) {
-
-    });
-  } catch {
-
-  }
-
+  exec(cmd);
   os.chdir(wk_path);
-}
+};
 
 
-function move_files(copy_from, copy_to, patterns) {
-  this.log('copying files to ' + copy_to)
-  os.system('rsync -r --exclude="{pattern}" {input}/. {out}'
-        .format(
-          pattern=patterns.join('" --exclude="'),
-          input=copy_from if copy_from else '.',
-          out=copy_to
-        )
-        )
-}
+PostReceive.prototype.move_files = function(copy_from, copy_to, patterns) {
+  this.log('copying files to ' + copy_to);
+
+  var cmd = 'rsync -r --exclude="{pattern}" {input}/. {out}'.format({
+    pattern: patterns.join('" --exclude="'),
+    input: copy_from || '.',
+    out: copy_to
+  });
+
+  exec(cmd);
+};
 
 
-function error(name, email, error) {
-  if (email) {
-    var subject = name + ' build failed'
-    var body = ('{} failed to build correctly at {}\nError message: {}'
-                .format(name, time.strftime('%c'), error));
+PostReceive.prototype.error = function(message) {
+  var self = this;
 
-    var p = os.popen('mail -s "{}" {}'.format(subject, ' '.join(email)), 'w')
-    p.write(body)
-    p.close()
+  if (self.options.email) {
+    var subject = name + ' build failed';
+    var body = '{} failed to build correctly at {}\nError message: {}'
+                .format(self.name, Date.toString(), message);
+
+    transporter.sendMail({
+      to: self.options.email,
+      subject: message,
+      text: body
+    });
   }
 
-  this.log('post-receive [error]: ' + error);
+  this.log('post-receive [error]: ' + message);
   process.exit(1);
-}
+};

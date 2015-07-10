@@ -9,12 +9,11 @@ var transporter = nodemailer.createTransport();
 format.extend(String.prototype);
 
 
-function run_cmd(cmd, cb) {
-  cb = cb || function () {};
+function run_cmd(cmd) {
   try {
-    cb(null, exec(cmd));
+    exec(cmd);
   } catch (e) {
-    cb(e, null);
+    return true;
   }
 }
 
@@ -36,6 +35,8 @@ PostReceive.prototype.process = function() {
 
   var orig_cwd = process.cwd();
   process.chdir(self.wk_path);
+
+  // console.log(process.cwd())
 
   if (self.options.build_cmd) {
     self.run_commands(self.options.build_cmd);
@@ -86,11 +87,9 @@ PostReceive.prototype.run_commands = function(commands) {
   commands.forEach(function(cmd) {
     self.log('running "{}"'.format(cmd));
 
-    run_cmd(cmd, function(err) {
-      if (err) {
-        self.error('{} failed'.format(cmd));
-      }
-    });
+    if (run_cmd(cmd)) {
+      self.error('{} failed'.format(cmd));
+    }
   });
 };
 

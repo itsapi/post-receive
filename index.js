@@ -36,8 +36,6 @@ PostReceive.prototype.process = function() {
   var orig_cwd = process.cwd();
   process.chdir(self.wk_path);
 
-  // console.log(process.cwd())
-
   if (self.options.build_cmd) {
     self.run_commands(self.options.build_cmd);
   }

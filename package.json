@@ -20,7 +20,8 @@
     "post-receive": "./bin/post-receive"
   },
   "scripts": {
-    "test": "tape tests/*.js | tap-spec",
+    "clean": "rm -r tests/output",
+    "test": "npm run clean && tape tests/*.js | tap-spec",
     "start": "./bin/post-receive"
   },
   "repository": {

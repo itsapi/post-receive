@@ -33,7 +33,7 @@ var PostReceive = function(options) {
 PostReceive.prototype.process = function() {
   var self = this;
 
-  var orig_cwd = process.cwd();
+  self.orig_cwd = process.cwd();
   process.chdir(self.wk_path);
 
   if (self.options.build_cmd) {
@@ -58,7 +58,7 @@ PostReceive.prototype.process = function() {
   }
 
   self.log('finished');
-  process.chdir(orig_cwd);
+  process.chdir(self.orig_cwd);
 
   if (self.options.url) {
     self.log('site should now be live at ' + self.options.url);
@@ -147,8 +147,8 @@ PostReceive.prototype.error = function(message) {
     });
   }
 
-  this.log('post-receive [error]: ' + message);
-  process.exit(1);
+  process.chdir(self.orig_cwd);
+  throw('post-receive [error]: ' + message);
 };
 
 

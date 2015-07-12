@@ -2,6 +2,7 @@
 
 var PostReceive = require('../'),
     pkg = require('../package'),
+    fs = require('fs'),
     path = require('path'),
     argv = require('minimist')(process.argv.slice(2));
 
@@ -28,7 +29,8 @@ if (argv.v || argv.version) {
   options.cwd = argv.p || argv.path || process.cwd();
 
   try {
-    options.config = require(path.resolve(options.cwd, config_path));
+    config_path = path.resolve(options.cwd, config_path);
+    options.config = JSON.parse(fs.readFileSync(config_path));
   } catch (e) {
     console.error('Config file not found');
     process.exit(1);

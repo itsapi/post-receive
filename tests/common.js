@@ -1,3 +1,5 @@
+var fs = require('fs');
+var path = require('path');
 var exec = require('child_process').spawnSync;
 var format = require('string-format');
 var PostReceive = require('../');
@@ -21,8 +23,9 @@ common.setup = function(name) {
 
 common.create_pr = function() {
   var options = {};
+  var config_path = path.resolve('tests/fixtures/processing/options.json');
 
-  options.config = require('./fixtures/processing/options.json');
+  options.config = JSON.parse(fs.readFileSync(config_path));
   options.cwd = 'tests/fixtures/processing';
   options.logging = true;
 

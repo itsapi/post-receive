@@ -15,8 +15,8 @@ common.diff = function(expected, actual) {
 };
 
 common.setup = function(name) {
+  exec('rm', ['-r', 'tests/fixtures/processing']);
   exec('mkdir', ['-p', 'tests/fixtures/processing']);
-  exec('rm', ['-r', 'tests/fixtures/processing/.']);
   exec('cp', ['-r', 'tests/fixtures/input/.', 'tests/fixtures/processing/']);
   exec('cp', ['tests/fixtures/{}.json'.format(name), 'tests/fixtures/processing/options.json']);
 };

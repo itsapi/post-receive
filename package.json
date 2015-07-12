@@ -14,13 +14,14 @@
   "devDependencies": {
     "tap-spec": "~4.0.2",
     "jshint": "~2.8.0",
-    "tape": "~4.0.0"
+    "tape": "~4.0.0",
+    "rimraf": "~2.4.1"
   },
   "bin": {
     "post-receive": "./bin/post-receive"
   },
   "scripts": {
-    "clean": "rm -r tests/output",
+    "clean": "rimraf tests/output",
     "test": "npm run clean && tape tests/*.js | tap-spec",
     "start": "./bin/post-receive"
   },

@@ -27,7 +27,7 @@ common.create_pr = function() {
 
   options.config = JSON.parse(fs.readFileSync(config_path));
   options.cwd = 'tests/fixtures/processing';
-  options.logging = true;
+  options.logging = false;
 
   return new PostReceive(options);
 };

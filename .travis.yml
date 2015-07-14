@@ -1,11 +1,8 @@
 language: node_js
 
-node_js:
-  - '0.12'
+node_js: '0.12'
 
-script:
-  - npm install
-  - npm test
+script: npm test
 
 notifications:
   webhooks:
@@ -15,3 +12,12 @@ notifications:
       - http://git.oliverfaircliff.com
     on_success: always
     on_failure: never
+
+deploy:
+  provider: npm
+  email: mail@dvbris.com
+  api_key:
+    secure: NNLVOULIGf4fMFQp6jBW5ggHnqmQ9WtaPBjF3oVIyKcwAU2SHNIzWacjFi1/+KkD6ywzP4A+P5TYixM+v7ZMfGGOUPNB+xqis1wZ9uM0DeMkyFspVsjZ4LJKFVKXOt38bawP+KaEtRIUqTmQ80R7biJf6B0ygsdwGyCGDUxoLZk=
+  on:
+    tags: true
+    repo: itsapi/post-receive

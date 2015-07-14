@@ -1,7 +1,9 @@
 Post Receive
 ============
 
+[![NPM Version](https://img.shields.io/npm/v/post-receive.svg)](https://www.npmjs.com/package/post-receive)
 [![Build Status](https://img.shields.io/travis/itsapi/post-receive/master.svg)](https://travis-ci.org/itsapi/post-receive)
+[![Dependency Status](https://img.shields.io/david/itsapi/post-receive.svg)](https://david-dm.org/itsapi/post-receive)
 
 These scripts are run after code is pushed to the server. They compile everything and deploy to the correct location.
 

@@ -1,13 +1,11 @@
-language: python
+language: node_js
 
-python:
-  - '2.7'
-  - '3.2'
-  - '3.3'
-  - '3.4'
-  - 'nightly'
+node_js:
+  - '0.12'
 
-script: python -m tests
+script:
+  - npm install
+  - npm test
 
 notifications:
   webhooks:

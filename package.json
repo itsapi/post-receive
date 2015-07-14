@@ -1,0 +1,38 @@
+{
+  "name": "post-receive",
+  "version": "1.0.0",
+  "description": "The scripts we use to get stuff in the right place on the server.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "nodemailer": "^1.4.0",
+    "string-format": "^0.5.0",
+    "minimist": "~1.1.1"
+  },
+  "devDependencies": {
+    "tap-spec": "~4.0.2",
+    "jshint": "~2.8.0",
+    "tape": "~4.0.0",
+    "rimraf": "~2.4.1"
+  },
+  "bin": {
+    "post-receive": "./bin/post-receive"
+  },
+  "scripts": {
+    "clean": "rimraf tests/output",
+    "test": "npm run clean && tape tests/*.js | tap-spec",
+    "start": "./bin/post-receive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itsapi/post-receive.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/itsapi/post-receive/issues"
+  },
+  "homepage": "https://github.com/itsapi/post-receive#readme"
+}

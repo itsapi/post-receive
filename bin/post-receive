@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+var PostReceive = require('../'),
+    pkg = require('../package'),
+    fs = require('fs'),
+    path = require('path'),
+    argv = require('minimist')(process.argv.slice(2));
+
+
+if (argv.v || argv.version) {
+
+  console.log(pkg.name + '@' + pkg.version);
+
+} else if (argv.h || argv.help) {
+
+  console.log('Usage: ' + pkg.name + ' [options]\n');
+  console.log('-h|--help      display this help message');
+  console.log('-v|--version   display the version number');
+  console.log('-q|--quiet     suppress logging');
+  console.log('-p|--path      path to working directory (default ./)');
+  console.log('-c|--config    path to JSON config file (default options.json)');
+
+} else {
+
+  var options = {};
+  var config_path = argv.c || argv.config || './options.json';
+
+  options.logging = !(argv.q || argv.quiet);
+  options.cwd = argv.p || argv.path || process.cwd();
+
+  try {
+    config_path = path.resolve(options.cwd, config_path);
+    options.config = JSON.parse(fs.readFileSync(config_path));
+  } catch (e) {
+    console.error('Config file not found');
+    process.exit(1);
+  }
+
+  var pr = new PostReceive(options);
+
+  pr.process();
+
+}

@@ -1,5 +1,6 @@
 {
     "copy_to": "/home/git/deploy/post-receive",
+    "start_cmd": ["npm install"],
     "hosts": {
         "oliverfaircliff": {
             "copy_to": "/opt/ptr"

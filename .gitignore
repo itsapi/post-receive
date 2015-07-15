@@ -5,3 +5,4 @@ output
 processing
 node_modules
 npm-debug.log
+coverage

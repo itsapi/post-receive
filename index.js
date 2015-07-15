@@ -18,6 +18,17 @@ function run_cmd(cmd) {
 }
 
 
+/**
+ * Creates a new `PostReceive` instance.
+ * @name PostReceive
+ * @function
+ * @param {Object} options An object containing the following fields:
+ *
+ *  - `cwd` (String): The working directory to start processing in
+ *  - `logging` (Boolean): Output logs if `true`
+ *  - `config` (Object): The `options.json` to use for the build process (see example)
+ */
+
 var PostReceive = function(options) {
   var self = this;
 
@@ -29,6 +40,12 @@ var PostReceive = function(options) {
 
   self.load_options();
 };
+
+/**
+ * Run the build process
+ * @name PostReceive.process
+ * @function
+ */
 
 PostReceive.prototype.process = function() {
   var self = this;
@@ -65,11 +82,24 @@ PostReceive.prototype.process = function() {
   }
 };
 
+/**
+ * Log a message if `this.logging`
+ * @name PostReceive.log
+ * @function
+ * @param {Anything} message Message to log to console
+ */
+
 PostReceive.prototype.log = function(message) {
   if (this.logging) {
     console.log('post-receive:', message);
   }
 };
+
+/**
+ * Parse `this.options` to load host specific options
+ * @name PostReceive.load_options
+ * @function
+ */
 
 PostReceive.prototype.load_options = function() {
   var self = this;
@@ -78,6 +108,13 @@ PostReceive.prototype.load_options = function() {
     self.options[option] = self.options.hosts[os.hostname()][option];
   }
 };
+
+/**
+ * Run list of shell commands sequentially, handling errors
+ * @name PostReceive.run_commands
+ * @function
+ * @param {Array} commands List of commands to run
+ */
 
 PostReceive.prototype.run_commands = function(commands) {
   var self = this;
@@ -90,6 +127,12 @@ PostReceive.prototype.run_commands = function(commands) {
     }
   });
 };
+
+/**
+ * Empty the `copy_to` directory, excluding paths in ignore list
+ * @name PostReceive.clear_dir
+ * @function
+ */
 
 PostReceive.prototype.clear_dir = function() {
   var self = this;
@@ -112,6 +155,12 @@ PostReceive.prototype.clear_dir = function() {
   process.chdir(wk_path);
 };
 
+/**
+ * Copy processed files to `copy_to` directory, excluding paths in ignore list
+ * @name PostReceive.move_files
+ * @function
+ */
+
 PostReceive.prototype.move_files = function() {
   var self = this;
 
@@ -129,6 +178,13 @@ PostReceive.prototype.move_files = function() {
 
   run_cmd(cmd);
 };
+
+/**
+ * Handle build error
+ * @name PostReceive.error
+ * @function
+ * @param {String} message Error message to be logged and sent in build failed email
+ */
 
 PostReceive.prototype.error = function(message) {
   var self = this;

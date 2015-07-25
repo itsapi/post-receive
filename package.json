@@ -21,7 +21,7 @@
     "post-receive": "./bin/post-receive"
   },
   "scripts": {
-    "clean": "rimraf tests/output",
+    "clean": "rimraf tests/output tests/fixtures/processing",
     "test": "npm run clean && tape tests/*.js | tap-spec",
     "start": "./bin/post-receive"
   },

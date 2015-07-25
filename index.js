@@ -32,11 +32,10 @@ function run_cmd(cmd) {
 var PostReceive = function(options) {
   var self = this;
 
-  options = options || {};
-
   self.wk_path = options.cwd;
   self.logging = options.logging;
   self.options = options.config;
+  self.hostname = options.hostname || os.hostname();
 
   self.load_options();
 };
@@ -104,8 +103,8 @@ PostReceive.prototype.log = function(message) {
 PostReceive.prototype.load_options = function() {
   var self = this;
 
-  for (var option in (self.options.hosts && self.options.hosts[os.hostname()])) {
-    self.options[option] = self.options.hosts[os.hostname()][option];
+  for (var option in (self.options.hosts && self.options.hosts[self.hostname])) {
+    self.options[option] = self.options.hosts[self.hostname][option];
   }
 };
 

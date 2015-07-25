@@ -1,0 +1,15 @@
+{
+  "copy_from": "src",
+  "build_cmd": ["mkdir -p ../../output/combo_three/asdf", "echo 1234 > ../../output/combo_three/asdf/file"],
+  "copy_to": "../../output/combo_three",
+  "start_cmd": ["mkdir images", "mv logo.png images"],
+  "ignore": ["asdf"],
+  "hosts": {
+    "server1": {
+      "ignore": []
+    },
+    "server2": {
+      "start_cmd": []
+    }
+  }
+}

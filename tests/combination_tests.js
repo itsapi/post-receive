@@ -17,3 +17,21 @@ test('combo_two', function(t) {
   t.notok(common.diff('tests/expected/combo_two', 'tests/output/combo_two'), 'output directory is as expected');
   t.end();
 });
+
+test('combo_three', function(t) {
+  t.test('hostname server1', function(st) {
+    common.setup('combo_three');
+    var pr = common.create_pr({hostname: 'server1'});
+    st.notok(pr.process(), 'post-receive exits cleanly');
+    st.notok(common.diff('tests/expected/combo_three_a', 'tests/output/combo_three'), 'output directory is as expected');
+    st.end();
+  });
+
+  t.test('hostname server2', function(st) {
+    common.setup('combo_three');
+    var pr = common.create_pr({hostname: 'server2'});
+    st.notok(pr.process(), 'post-receive exits cleanly');
+    st.notok(common.diff('tests/expected/combo_three_b', 'tests/output/combo_three'), 'output directory is as expected');
+    st.end();
+  });
+});

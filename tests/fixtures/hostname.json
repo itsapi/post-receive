@@ -1,0 +1,9 @@
+{
+  "build_cmd": ["cat src/footnote.html >> src/index.html", "rm src/footnote.html"],
+  "copy_to": "../../output/hostname",
+  "hosts": {
+    "server": {
+      "build_cmd": ["echo 1234 > src/asdf.txt"]
+    }
+  }
+}

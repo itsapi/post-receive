@@ -41,3 +41,11 @@ test('ignore', function(t) {
   t.notok(common.diff('tests/expected/ignore', 'tests/output/ignore'), 'output directory is as expected');
   t.end();
 });
+
+test('hostname', function(t) {
+  common.setup('hostname');
+  var pr = common.create_pr({hostname: 'server'});
+  t.notok(pr.process(), 'post-receive exits cleanly');
+  t.notok(common.diff('tests/expected/hostname', 'tests/output/hostname'), 'output directory is as expected');
+  t.end();
+});

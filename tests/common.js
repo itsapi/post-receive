@@ -21,10 +21,10 @@ common.setup = function(name) {
   exec('cp', ['tests/fixtures/{}.json'.format(name), 'tests/fixtures/processing/options.json']);
 };
 
-common.create_pr = function() {
-  var options = {};
+common.create_pr = function(options) {
   var config_path = path.resolve('tests/fixtures/processing/options.json');
 
+  options = options || {};
   options.config = JSON.parse(fs.readFileSync(config_path));
   options.cwd = 'tests/fixtures/processing';
   options.logging = false;

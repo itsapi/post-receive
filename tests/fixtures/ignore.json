@@ -1,4 +1,4 @@
 {
   "copy_to": "../../output/ignore",
-  "ignore": ["README.md", "package.json"]
+  "ignore": ["README.md", "package.json", "src/js"]
 }

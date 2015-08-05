@@ -29,12 +29,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/itsapi/post-receive.git"
+    "url": "git+https://github.com/itsapi/post-receive.git"
   },
-  "author": "Geraint White <mail@geraintwhite.co.uk>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/itsapi/post-receive/issues"
   },
-  "homepage": "https://github.com/itsapi/post-receive#readme"
+  "homepage": "https://github.com/itsapi/post-receive#readme",
+  "contributors": [
+    "Geraint White <mail@geraintwhite.co.uk>",
+    "Oliver Faircliff <mail@oliverfaircliff.com>"
+  ],
+  "license": "GPL-2.0",
+  "author": "Dvbris <mail@dvbris.com>"
 }

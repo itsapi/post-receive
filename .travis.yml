@@ -3,7 +3,7 @@ sudo: false
 
 node_js: '0.12'
 
-script: npm test
+script: npm run travis
 
 notifications:
   webhooks:

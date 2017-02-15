@@ -19,6 +19,11 @@
     "tap-spec": "~4.1.1",
     "tape": "~4.6.0"
   },
+  "greenkeeper": {
+    "ignore": [
+      "nodemailer"
+     ]
+  },
   "bin": {
     "post-receive": "./bin/post-receive"
   },

@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "nodemailer": "^2.0.0",
-    "string-format": "^1.0.0",
+    "string-format": "^2.0.0",
     "minimist": "~1.2.0"
   },
   "devDependencies": {

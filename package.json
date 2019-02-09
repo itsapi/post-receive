@@ -17,7 +17,7 @@
     "jshint": "~2.10.0",
     "rimraf": "~2.6.0",
     "tap-spec": "~5.0.0",
-    "tape": "~4.9.0"
+    "tape": "~4.10.0"
   },
   "greenkeeper": {
     "ignore": [

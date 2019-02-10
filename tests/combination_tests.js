@@ -19,6 +19,8 @@ test('combo_two', function(t) {
 });
 
 test('combo_three', function(t) {
+  t.plan(2);
+
   t.test('hostname server1', function(st) {
     common.setup('combo_three');
     var pr = common.create_pr({hostname: 'server1'});

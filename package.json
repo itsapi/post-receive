@@ -22,7 +22,7 @@
   "greenkeeper": {
     "ignore": [
       "nodemailer"
-     ]
+    ]
   },
   "bin": {
     "post-receive": "./bin/post-receive"

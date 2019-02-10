@@ -1,29 +1,25 @@
 language: node_js
 sudo: false
-
 node_js:
-  - 10
-  - 8
-  - 6
-  - 4
-
+- 10
+- 8
+- 6
+- 4
 script: npm run travis
-
 notifications:
   webhooks:
     urls:
-      - http://git.dvbris.com
-      - http://git.geraintwhite.co.uk
-      - http://git.oliverfaircliff.com
-      - http://git.books.oliverfaircliff.com
+    - http://git.dvbris.com
+    - http://git.geraintwhite.co.uk
+    - http://git.oliverfaircliff.com
+    - http://git.books.oliverfaircliff.com
     on_success: always
     on_failure: never
-
 deploy:
   provider: npm
   email: mail@dvbris.com
   api_key:
-    secure: NNLVOULIGf4fMFQp6jBW5ggHnqmQ9WtaPBjF3oVIyKcwAU2SHNIzWacjFi1/+KkD6ywzP4A+P5TYixM+v7ZMfGGOUPNB+xqis1wZ9uM0DeMkyFspVsjZ4LJKFVKXOt38bawP+KaEtRIUqTmQ80R7biJf6B0ygsdwGyCGDUxoLZk=
+    secure: Gf1DBpK9eh/XURFw5hkBksYsGtUljW4e0mBAwo9oSSNpJL8kHxDqoTW+VWo56w8I97FIXPCFFL699wCcgBYzBmIo1cnrE11CzzSAg8h80zi0jVsxp7tDGVNPyYTOMNHkWVzEI5cOuMqsl9i4MlORuQT4U+g5l3XQBz8yIw9Hwok=
   on:
     tags: true
     repo: itsapi/post-receive

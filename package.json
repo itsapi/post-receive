@@ -15,7 +15,7 @@
     "codeclimate-test-reporter": "^0.5.1",
     "istanbul": "~0.4.2",
     "jshint": "~2.10.0",
-    "rimraf": "~2.6.0",
+    "rimraf": "~3.0.0",
     "tap-spec": "~5.0.0",
     "tape": "~4.11.0"
   },

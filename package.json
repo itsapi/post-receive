@@ -9,7 +9,7 @@
   "dependencies": {
     "nodemailer": "^2.0.0",
     "string-format": "^2.0.0",
-    "minimist": "~1.2.2"
+    "minimist": "~1.2.4"
   },
   "devDependencies": {
     "codeclimate-test-reporter": "^0.5.1",

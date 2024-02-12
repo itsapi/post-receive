@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "dependencies": {
-    "nodemailer": "^2.0.0",
+    "nodemailer": "^4.0.1",
     "string-format": "^2.0.0",
     "minimist": "~1.2.8"
   },
